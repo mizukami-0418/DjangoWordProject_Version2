@@ -1,0 +1,2 @@
+# DjangoWordProject_Version2
+単語帳アプリの改良版だよ
