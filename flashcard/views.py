@@ -323,7 +323,8 @@ def check_review_answer(request, progress_id):
     
     # POSTリクエスト以外は404エラーを返す
     else:
-        raise Http404('Page Not Found')
+        messages.error(request, 'ページに辿り着けませんでした')
+        return redirect('user_home')
 
 
 # 回答の正誤を判定する関数
