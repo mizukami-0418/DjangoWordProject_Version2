@@ -321,7 +321,7 @@ def check_review_answer(request, progress_id):
             review_progress.save()
             return render(request, 'flashcard/check_review_answer.html', {'review_progress': review_progress, 'current_question': current_question})
     
-    # POSTリクエスト以外は404エラーを返す
+    # POSTリクエスト以外はホームへリダイレクト
     else:
         messages.error(request, 'ページに辿り着けませんでした')
         return redirect('user_home')
