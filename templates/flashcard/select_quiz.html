@@ -13,15 +13,26 @@
 {% endif %}
 <form method="post">
     {% csrf_token %}
+    <p>最初からゲームを始めます</p>
     <p><button type="submit" name="quiz_mode" value="new">最初から</button></p>
     {% if user_progress %}
+    <p>「最初から」で始めた問題の続きから再開します</p>
     <p><button type="submit" name="quiz_mode" value="continue">前回の続きから</button></p>
     {% endif %}
-    {% if review_progress and user_word_status %}
-    <p><button type="submit" name="quiz_mode" value="review_continue">復習モードの続きから</button></p>
-    {% elif user_word_status %}
+    {% if user_word_status %}
+    <p>間違った問題を再度学習します</p>
     <p><button type="submit" name="quiz_mode" value="review">復習モード</button></p>
     {% endif %}
+    {% if review_progress %}
+    <p>復習モードを続きから始めます</p>
+    <p><button type="submit" name="quiz_mode" value="review_continue">復習モードの続きから</button></p>
+    {% endif %}
+    {% if user_word_status %}
+    <p>回答した問題をもう一度回答します</p>
+    <p><button type="submit" name="quiz_mode" value="replay">リプレイモード</button></p>
+    {% endif %}
+    <p>ランダムで100問取得し力試しをします</p>
+    <p><button type="submit" name="quiz_mode" value="test">テストモード</button></p>
 </form>
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>

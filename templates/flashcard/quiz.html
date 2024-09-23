@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>単語帳モード</h2>
+{% include "templates/includes/message.html" %}
 <h5>{{ user_progress.level.name }}クラス</h5>
 <h5>{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h5>
 <h6>クイズ画面</h6>
@@ -11,7 +12,7 @@
     <li>{{ current_question.part_of_speech }}</li>
     <li>{{ current_question.phrase }}</li>
 </ul>
-
+<h4>全{{ review_progress.total_questions }}問</h4>
 <h6>第{{ user_progress.current_question_index | add:1 }}問</h6>
 
 {% if user_progress.mode == 'en' %}

@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}SELECT CONTINUE{% endblock %}
+{% block title %}REVIEW CONTINUE{% endblock %}
 
 {% block content %}
 <h2>中断したクイズ</h2>
 
-{% if user_progress_data %}
+{% if review_progress_data %}
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">レベル</th>
             <th scope="col">モード</th>
             <th scope="col">出題数</th>
             <th scope="col">回答数</th>
@@ -20,22 +19,21 @@
         </tr>
     </thead>
     <tbody>
-        {% for user_progress in user_progress_data %}
+        {% for review_progress in review_progress_data %}
         <tr>
-            <td>{{ user_progress.level.name }}</td>
-            <td>{% if user_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</td>
-            <td>{{ user_progress.total_questions }}</td>
-            <td>{{ user_progress.current_question_index }}</td>
-            <td>{{ user_progress.score }}</td>
-            <td>{{ user_progress.score }} / {{ user_progress.current_question_index }}</td>
+            <td>{% if review_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</td>
+            <td>{{ review_progress.total_questions }}</td>
+            <td>{{ review_progress.current_question_index }}</td>
+            <td>{{ review_progress.score }}</td>
+            <td>{{ review_progress.score }} / {{ review_progress.current_question_index }}</td>
             <td>
-                <form method="post" action="{% url 'quiz_restart' user_progress.id %}">
+                <form method="post" action="{% url 'review_quiz' review_progress.id %}">
                     {% csrf_token %}
                     <button type="submit">再開</button>
                 </form>
             </td>
             <td>
-                <form method="post" action="{% url 'reset_user_progress' user_progress.id %}">
+                <form method="post" action="{% url 'reset_review_progress' review_progress.id %}">
                     {% csrf_token %}
                     <button type="submit">削除</button>
                 </form>
