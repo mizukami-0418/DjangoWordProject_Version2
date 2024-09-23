@@ -50,6 +50,7 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
+    request.session.flush() # セッションを完全に削除
     messages.success(request,'ログアウトしました')
     return redirect('home')
 

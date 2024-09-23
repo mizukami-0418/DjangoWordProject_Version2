@@ -22,14 +22,27 @@ def select_quiz(request):
         # 「最初から」を選んだ場合、新しくクイズを開始する
         if selection == 'new':
             return redirect('select_level')
+        
         # 「前回の続きから」はuser_progress.idからデータを取得し、再開する
         elif selection == 'continue':
             user_progress_data = UserProgress.objects.filter(user=request.user, is_completed=False).all()
             return render(request, 'flashcard/show_paused_data.html', {'user_progress_data': user_progress_data})
+        # 復習モードの続き
         elif selection == 'review_continue':
-            return redirect('review_quiz', review_id=review_progress.id)
+            review_progress_data = UserReviewProgress.objects.filter(user=request.user, is_completed=False).all()
+            return render(request, 'flashcard/show_review_paused_data.html', {'review_progress_data': review_progress_data})
+        # 復習モード
         elif selection == 'review':
             return render(request, 'flashcard/review_select_mode.html')
+        # リプレイモード
+        elif selection == 'replay':
+            request.session['replay'] = 'replay'
+            return redirect('select_level')
+        # テストモード
+        elif selection == 'test':
+            request.session['test'] = 'test'
+            return redirect('select_level')
+        
         # quiz_modeを取得できないか、上記以外の場合はuser_homeへ
         else:
             messages.error(request, 'エラーが発生しました。最初からお願いします。')
@@ -63,18 +76,18 @@ def get_quiz_session_data(request):
     # セッションから難易度、モード、問題数を取得して返す
     level_id = request.session.get('level_id')
     mode = request.session.get('mode')
-    num_questions = request.session.get('num_questions')
+    # num_questions = request.session.get('num_questions')
     
     level = get_object_or_404(Level, id=level_id)
     
-    return level, mode, num_questions
+    return level, mode
 
 
 # モードセレクト
 @login_required
 def select_mode(request):
     # ヘルパー関数を使用し、levelを取得
-    level, _, _ = get_quiz_session_data(request)
+    level, _= get_quiz_session_data(request)
     # 入力確認
     if level is None:
         messages.error(request, 'エラーが発生しました。最初からお願いします')
@@ -85,56 +98,62 @@ def select_mode(request):
         # ポストデータからモードを取得し、セッションに保持。select_num_questionsにリダイレクト
         mode = request.POST.get('mode')
         request.session['mode'] = mode
-        return redirect('select_num_questions')
+        return redirect('quiz')
     
     # GETリクエスト
     # 取得したlevelを渡し、select_mode.htmlをレンダリング
     return render(request, 'flashcard/select_mode.html', {'level': level})
 
 
-# 問題数セレクト
-@login_required
-def select_num_questions(request):
-    # ヘルパー関数で難易度とモードを取得
-    level, mode, _ = get_quiz_session_data(request)
-    # 入力確認。難易度とモードがない場合
-    if not(level and mode):
-        messages.error(request, 'エラーが発生しました。再度選択してください')
-        return redirect('select_level')
-    
-    # POSTリクエスト
-    if request.method == 'POST':
-        # ポストデータの問題数を取得
-        num_questions = request.POST.get('num_questions')
-        # num_questionsのバリデーション。num_questionsの存在。数値であるか。整数で0以上か。
-        if num_questions is None or not num_questions.isdigit() or int(num_questions) <= 0:
-            messages.error(request, 'エラーが発生しました。再度問題数を選択してください')
-            # もう一度問題数セレクトを表示
-            return render(request, 'flashcard/select_num_questions.html', {'level': level, 'mode': mode})
-        # 正常な場合は、num_questionsを整数に変換し、セッションに保存しquizにリダイレクト
-        request.session['num_questions'] = int(num_questions)
-        return redirect('quiz')
-    
-    # GETリクエスト
-    # levelとmodeを渡し、select_num_questions.htmlをレンダリング
-    return render(request, 'flashcard/select_num_questions.html', {'level': level, 'mode': mode})
-
 # 単語帳クイズの初期設定を行う関数
 @login_required
 def quiz(request):
+    # テストモードとリプレイモードの場合、セッション情報を取得しセッションデータを削除
+    test = request.session.pop('test', None)
+    replay = request.session.pop('replay', None)
     # ヘルパー関数を使用し、各データを取得
-    level, mode, num_questions = get_quiz_session_data(request)
+    level, mode = get_quiz_session_data(request)
     # データが全て存在しない場合
-    if not (level and mode and num_questions):
+    if not (level and mode):
         messages.error(request, 'エラーが発生しました。難易度選択からお願いします')
         return redirect('select_level')
     
     words = Word.objects.filter(level_id=level.id) # 選択した難易度の単語を全て抽出
     # 抽出した単語が選択した出題数より少ない場合、エラーにならないための処理
-    total_questions = min(num_questions, words.count())
-    # total_questionsの数だけ、wordsからidで取得し、questionsにリストで保存
-    questions = random.sample(list(words.values_list('id', flat=True)), total_questions)
-    # question_indexとscoreを初期化
+    
+    # テストモードの場合、ランダムで5問出題する
+    if test: 
+        total_questions = 5
+        questions = random.sample(list(words.values_list('id', flat=True)), total_questions)
+        messages.success(request, 'テストモードに来た')
+    elif replay:
+        # UserWordStatusから選択したモードの単語を全て取得
+        replay_all_questions = UserWordStatus.objects.filter(user=request.user, mode=mode)
+        print(len(replay_all_questions))
+        # そこから単語のidを取得
+        replay_all_questions_id = replay_all_questions.values_list('word_id', flat=True)
+        print(replay_all_questions_id)
+        # 選択したlevelでフィルタリングされたwordsからreplay_all_questions_idの単語を取得
+        replay_questions = words.filter(id__in=replay_all_questions_id)
+        print(replay_questions)
+        total_questions = len(replay_questions)
+        print(total_questions)
+        questions = random.sample(list(replay_questions.values_list('id', flat=True)), total_questions)
+        print(questions)
+        if questions:
+            messages.success(request, 'リプレイに来た')
+            pass
+        else:
+            messages.success(request, '初めての挑戦です。「最初から」モードで開始してください')
+            return redirect('user_home')
+    # 通常モードの場合
+    else:
+        total_questions = len(words)
+        # total_questionsの数だけ、wordsからidで取得し、questionsにリストで保存
+        questions = random.sample(list(words.values_list('id', flat=True)), total_questions)
+        messages.success(request, '通常モードに来た')
+        # question_indexとscoreを初期化
+        
     question_index = 0
     score = 0
     
@@ -159,6 +178,7 @@ def quiz(request):
         'user_progress': user_progress,
     }
     return render(request, 'flashcard/quiz.html', context)
+
 
 # 現在の問題を取得するヘルパー関数
 def get_current_question(request, progress_id):
@@ -399,6 +419,24 @@ def pause_review(request, progress_id):
         messages.error(request, 'エラーが発生しました。ホームへ戻ります。')
         return redirect('user_home')
 
+# 中断データを削除関数
+def reset_user_progress(request, progress_id):
+    user_progress = get_object_or_404(UserProgress, id=progress_id, user=request.user)
+    user_progress.is_completed = True
+    user_progress.is_paused = False
+    user_progress.save()
+    messages.success(request, '中断データをリセットしました')
+    return redirect('user_home')
+
+
+def reset_review_progress(request, progress_id):
+    review_progress = get_object_or_404(UserReviewProgress, id=progress_id, user=request.user)
+    review_progress.is_completed = True
+    review_progress.is_paused = False
+    review_progress.save()
+    messages.success(request, '中断データをリセットしました')
+    return redirect('user_home')
+
 
 
 # 単語帳モードの最終結果を表示する関数
@@ -417,7 +455,10 @@ def result(request, progress_id):
         'correct_answer_rate':correct_answer_rate,
         'user_progress': user_progress,
     }
-
+    # テストモードの場合
+    if user_progress.total_questions == 5:
+        return render(request, 'flashcard/test_result.html', context)
+    
     return render(request, 'flashcard/result.html', context)
 
 # 復習モードの最終結果を表示する関数
@@ -500,4 +541,33 @@ def select_quiz(request):
         'user_progress': user_progress,
     }
     return render(request, 'flashcard/select_quiz.html', context)
+'''
+
+'''
+# 問題数セレクト
+@login_required
+def select_num_questions(request):
+    # ヘルパー関数で難易度とモードを取得
+    level, mode, _ = get_quiz_session_data(request)
+    # 入力確認。難易度とモードがない場合
+    if not(level and mode):
+        messages.error(request, 'エラーが発生しました。再度選択してください')
+        return redirect('select_level')
+    
+    # POSTリクエスト
+    if request.method == 'POST':
+        # ポストデータの問題数を取得
+        num_questions = request.POST.get('num_questions')
+        # num_questionsのバリデーション。num_questionsの存在。数値であるか。整数で0以上か。
+        if num_questions is None or not num_questions.isdigit() or int(num_questions) <= 0:
+            messages.error(request, 'エラーが発生しました。再度問題数を選択してください')
+            # もう一度問題数セレクトを表示
+            return render(request, 'flashcard/select_num_questions.html', {'level': level, 'mode': mode})
+        # 正常な場合は、num_questionsを整数に変換し、セッションに保存しquizにリダイレクト
+        request.session['num_questions'] = int(num_questions)
+        return redirect('quiz')
+    
+    # GETリクエスト
+    # levelとmodeを渡し、select_num_questions.htmlをレンダリング
+    return render(request, 'flashcard/select_num_questions.html', {'level': level, 'mode': mode})
 '''
