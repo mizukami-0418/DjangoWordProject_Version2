@@ -12,7 +12,7 @@
     <li>{{ current_question.part_of_speech }}</li>
     <li>{{ current_question.phrase }}</li>
 </ul>
-<h4>全{{ review_progress.total_questions }}問</h4>
+<h4>全{{ user_progress.total_questions }}問</h4>
 <h6>第{{ user_progress.current_question_index | add:1 }}問</h6>
 
 {% if user_progress.mode == 'en' %}

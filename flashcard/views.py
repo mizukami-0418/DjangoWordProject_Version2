@@ -321,9 +321,10 @@ def check_review_answer(request, progress_id):
             review_progress.save()
             return render(request, 'flashcard/check_review_answer.html', {'review_progress': review_progress, 'current_question': current_question})
     
-    # POSTリクエスト以外は404エラーを返す
+    # POSTリクエスト以外はホームへリダイレクト
     else:
-        raise Http404('Page Not Found')
+        messages.error(request, 'ページに辿り着けませんでした')
+        return redirect('user_home')
 
 
 # 回答の正誤を判定する関数
@@ -421,21 +422,23 @@ def pause_review(request, progress_id):
 
 # 中断データを削除関数
 def reset_user_progress(request, progress_id):
+    user_progress_data = UserProgress.objects.filter(user=request.user, is_completed=False).all()
     user_progress = get_object_or_404(UserProgress, id=progress_id, user=request.user)
     user_progress.is_completed = True
     user_progress.is_paused = False
     user_progress.save()
-    messages.success(request, '中断データをリセットしました')
-    return redirect('user_home')
+    messages.success(request, '中断データを削除しました')
+    return render(request, 'flashcard/show_paused_data.html', {'user_progress_data': user_progress_data})
 
 
 def reset_review_progress(request, progress_id):
+    review_progress_data = UserReviewProgress.objects.filter(user=request.user, is_completed=False).all()
     review_progress = get_object_or_404(UserReviewProgress, id=progress_id, user=request.user)
     review_progress.is_completed = True
     review_progress.is_paused = False
     review_progress.save()
-    messages.success(request, '中断データをリセットしました')
-    return redirect('user_home')
+    messages.success(request, '中断データを削除しました')
+    return render(request, 'flashcard/show_review_paused_data.html', {'review_progress_data': review_progress_data})
 
 
 
