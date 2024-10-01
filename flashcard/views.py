@@ -125,7 +125,7 @@ def quiz(request):
     if test: 
         total_questions = 5
         questions = random.sample(list(words.values_list('id', flat=True)), total_questions)
-        messages.success(request, 'テストモードに来た')
+        messages.success(request, 'テストモードで開始します')
     elif replay:
         # UserWordStatusから選択したモードの単語を全て取得
         replay_all_questions = UserWordStatus.objects.filter(user=request.user, mode=mode)
@@ -141,7 +141,7 @@ def quiz(request):
         questions = random.sample(list(replay_questions.values_list('id', flat=True)), total_questions)
         print(questions)
         if questions:
-            messages.success(request, 'リプレイに来た')
+            messages.success(request, 'リプレイモードで開始します')
             pass
         else:
             messages.success(request, '初めての挑戦です。「最初から」モードで開始してください')
@@ -151,7 +151,7 @@ def quiz(request):
         total_questions = len(words)
         # total_questionsの数だけ、wordsからidで取得し、questionsにリストで保存
         questions = random.sample(list(words.values_list('id', flat=True)), total_questions)
-        messages.success(request, '通常モードに来た')
+        messages.success(request, '通常モードで開始します')
         # question_indexとscoreを初期化
         
     question_index = 0
@@ -204,7 +204,7 @@ def quiz_restart(request, progress_id):
     # contextに現在の問題と進行状況を渡し、quiz.htmlにレンダリング
     context = {
         'current_question': current_question,
-        'user_progress': user_progress,        
+        'user_progress': user_progress,
     }
     return render(request, 'flashcard/quiz.html', context)
 

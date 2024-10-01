@@ -5,6 +5,7 @@
 <h1>ログイン</h1>
 <h4>単語帳アプリへようこそ</h4>
 <h4>こちらよりログインをお願いします</h4>
+{% include "templates/includes/message.html" %}
 <form method='POST'>
     {% csrf_token %}
     {{ form.as_p }}

@@ -4,8 +4,8 @@
 <h1>Application Title</h1>
 {% include "templates/includes/message.html" %}
 <h3>単語帳アプリへようこそ!</h3>
-<h4>新規登録 or ログイン</h4>
-<h4>よろしくお願いします。</h4>
+{% comment %} <h4>新規登録 or ログイン</h4>
+<h4>よろしくお願いします。</h4> {% endcomment %}
 <p><a href="{% url 'register' %}">新規登録</a></p>
 <p><a href="{% url 'login' %}">ログイン</a></p>
 {% endblock %} 
