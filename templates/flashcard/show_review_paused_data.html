@@ -1,7 +1,6 @@
+{% comment %} templates/flashcard/show_review_paused_data.html {% endcomment %}
 {% extends "base.html" %}
-
 {% block title %}REVIEW CONTINUE{% endblock %}
-
 {% block content %}
 <h2>中断したクイズ</h2>
 {% include "templates/includes/message.html" %}
@@ -49,18 +48,3 @@
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
 {% endblock %}
-
-
-    {% comment %} <ul>
-        {% for user_progress in user_progress_data %}
-            <li>
-                <!-- クイズ情報を表示 -->
-                レベル: {{ user_progress.level.name }} | モード: {% if user_progress.mode == 'en' %}英訳{% else %}和訳{% endif %} | 正解数: {{ user_progress.score }}/{{ user_progress.total_questions }} | 回答数: {{ user_progress.current_question_index }}
-                <!-- 再開ボタン -->
-                <form method="post" action="{% url 'quiz_restart' user_progress.id %}">
-                    {% csrf_token %}
-                    <button type="submit">再開</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul> {% endcomment %}

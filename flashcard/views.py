@@ -129,17 +129,17 @@ def quiz(request):
     elif replay:
         # UserWordStatusから選択したモードの単語を全て取得
         replay_all_questions = UserWordStatus.objects.filter(user=request.user, mode=mode)
-        print(len(replay_all_questions))
+        # print(len(replay_all_questions))
         # そこから単語のidを取得
         replay_all_questions_id = replay_all_questions.values_list('word_id', flat=True)
-        print(replay_all_questions_id)
+        # print(replay_all_questions_id)
         # 選択したlevelでフィルタリングされたwordsからreplay_all_questions_idの単語を取得
         replay_questions = words.filter(id__in=replay_all_questions_id)
-        print(replay_questions)
+        # print(replay_questions)
         total_questions = len(replay_questions)
-        print(total_questions)
+        # print(total_questions)
         questions = random.sample(list(replay_questions.values_list('id', flat=True)), total_questions)
-        print(questions)
+        # print(questions)
         if questions:
             messages.success(request, 'リプレイモードで開始します')
             pass
@@ -180,7 +180,7 @@ def quiz(request):
     return render(request, 'flashcard/quiz.html', context)
 
 
-# 現在の問題を取得するヘルパー関数
+# UserProgressから現在の問題を取得するヘルパー関数
 def get_current_question(request, progress_id):
     # 進行状況とWordから現在の問題を取得し返す
     user_progress = get_object_or_404(UserProgress, id=progress_id, user=request.user, is_completed=False)
@@ -215,7 +215,7 @@ def start_review(request):
         mode = request.POST.get('mode')
         # modeが存在しない場合はuser_homeへリダイレクト
         if mode is None:
-            messages.error(request, 'モードを取得できませんでした。ホームへ戻ります')
+            messages.error(request, '出題モードを取得できませんでした。ホームへ戻ります')
             return redirect('user_home')
         
         # 特定のモードに基づいて、ユーザーが間違った問題を取得
@@ -251,7 +251,7 @@ def review_quiz(request, review_id):
         return redirect('user_home')
     # 復習の進行状況を取得
     review_progress = get_object_or_404(UserReviewProgress, id=review_id, user=request.user,)
-    # 現在問題番号から最初の問題を取得
+    # current_question_indexから最初の問題を取得
     current_question = review_progress.questions.all()[review_progress.current_question_index]
     
     # contextに最初の問題と進行状況を渡し、review_quiz.htmlにレンダリング
@@ -360,7 +360,7 @@ def check_answer(request, progress_id):
             word=current_question,
             mode=user_progress.mode  # モードを追加
         )
-        user_word_status.is_correct = is_correct
+        user_word_status.is_correct = is_correct # 正誤記録をuser_word_statusに記録
         user_word_status.save()
         
         user_progress.current_question_index += 1 # 問題番号を1加算
@@ -422,15 +422,20 @@ def pause_review(request, progress_id):
 
 # 中断データを削除関数
 def reset_user_progress(request, progress_id):
+    # UserProgressの完了していないデータを全て取得
     user_progress_data = UserProgress.objects.filter(user=request.user, is_completed=False).all()
+    # UserProgressからprogress_idが一致するデータを取得
     user_progress = get_object_or_404(UserProgress, id=progress_id, user=request.user)
+    # is_completedとis_pausedをTrueとFalseに上書き
     user_progress.is_completed = True
     user_progress.is_paused = False
     user_progress.save()
     messages.success(request, '中断データを削除しました')
+    # 更新されたuser_progress_dataで中断データをレンダリング
     return render(request, 'flashcard/show_paused_data.html', {'user_progress_data': user_progress_data})
 
 
+# 復習モードの中断データ削除関数(reset_user_progressと同様)
 def reset_review_progress(request, progress_id):
     review_progress_data = UserReviewProgress.objects.filter(user=request.user, is_completed=False).all()
     review_progress = get_object_or_404(UserReviewProgress, id=progress_id, user=request.user)
@@ -453,7 +458,7 @@ def result(request, progress_id):
     # 正答率
     correct_answer_rate = int( user_progress.score / user_progress.total_questions * 100)
     
-    # contextに正答率と進行状況を渡し、result.htmlにレンダリング
+    # contextに正答率と進行状況を格納
     context = {
         'correct_answer_rate':correct_answer_rate,
         'user_progress': user_progress,

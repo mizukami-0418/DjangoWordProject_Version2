@@ -1,11 +1,10 @@
+{% comment %} templates/flashcard/home.html {% endcomment %}
 {% extends "base.html" %}
-{% block title %}ホーム{% endblock title %}
+{% block title %}Home{% endblock title %}
 {% block content %}
 <h1>Application Title</h1>
 {% include "templates/includes/message.html" %}
 <h3>単語帳アプリへようこそ!</h3>
-{% comment %} <h4>新規登録 or ログイン</h4>
-<h4>よろしくお願いします。</h4> {% endcomment %}
 <p><a href="{% url 'register' %}">新規登録</a></p>
 <p><a href="{% url 'login' %}">ログイン</a></p>
 {% endblock %} 

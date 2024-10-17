@@ -4,6 +4,7 @@ from dictionary.models import Word
 from dictionary.models import Level
 
 
+# 通常モードとテストモードの進行状況
 class UserProgress(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE) # ユーザー
     level = models.ForeignKey(Level, on_delete=models.CASCADE) # 対象のレベル
@@ -26,12 +27,13 @@ class UserProgress(models.Model):
         # return f"{self.user.username} - {self.level.name} - {self.mode}: {self.score}/{self.total_questions}"
 
 
+# 単語ごとの正誤履歴
 class UserWordStatus(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザー
     word = models.ForeignKey(Word, on_delete=models.CASCADE)  # 問題（単語）
-    is_correct = models.BooleanField(default=False)  # このユーザーに対して正解されたか
+    is_correct = models.BooleanField(default=False)  # 正誤データ
     mode = models.CharField(max_length=10)  # モード（英訳か和訳か）
-    last_attempted_at = models.DateTimeField(auto_now=True)  # 最後に解答した日時
+    last_attempted_at = models.DateTimeField(auto_now=True)  # 最後に回答した日時
 
     class Meta:
         unique_together = ('user', 'word', 'mode')  # ユーザー、単語、モードの組み合わせを一意にする
@@ -40,6 +42,7 @@ class UserWordStatus(models.Model):
         verbose_name_plural = '正解ステータス情報'
 
 
+# 復習モードの進行状況
 class UserReviewProgress(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # ユーザー
     questions = models.ManyToManyField(Word)  # 復習対象の問題（複数問題を持つ）

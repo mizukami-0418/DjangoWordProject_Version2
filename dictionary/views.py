@@ -21,7 +21,8 @@ def search(request):
     return render(request, 'dictionary/search_result.html', {'results': results, 'query': query})
 
 
-''' UXが良くないため、一旦不要でコメントアウト
+''' 
+UXが良くないため、一旦不要でコメントアウト
 # 英和辞典
 @login_required
 def search_english(request):
