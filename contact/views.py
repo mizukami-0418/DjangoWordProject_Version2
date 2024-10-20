@@ -17,9 +17,13 @@ def contact_view(request):
             inquiry.save()  # 保存
             messages.success(request, success_message)
             return redirect('contact_result')
+        else:
+            messages.error(request, '入力内容に誤りがあります。再度ご確認ください。')
+            return render(request, 'contact/contact.html', {'form': form})
     else:
         form = InquiryForm()
     return render(request, 'contact/contact.html', {'form': form})
 
+@login_required
 def contact_result(request):
     return render(request, 'contact/contact_result.html')

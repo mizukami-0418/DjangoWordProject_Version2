@@ -8,6 +8,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('メールアドレスを入力')
         if not username:
             raise ValueError('ユーザー名を入力')
+        if not password:
+            raise ValueError('パスワードを入力してください')
         
         email = self.normalize_email(email)
         user = self.model(email=email, username=username)

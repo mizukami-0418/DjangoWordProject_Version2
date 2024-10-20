@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from dictionary.models import Word, Level
-from django.http import Http404, HttpResponse
 from django.contrib import messages
 from .models import UserProgress, UserWordStatus, UserReviewProgress
 import random
@@ -10,8 +9,8 @@ import json
 # 「最初から」か「続きから」を選択する
 @login_required
 def select_quiz(request):
-    user_progress = UserProgress.objects.filter(user=request.user,is_completed=False).first()
-    review_progress = UserReviewProgress.objects.filter(user=request.user, is_completed=False).first()
+    user_progress = UserProgress.objects.filter(user=request.user, is_completed=False).all()
+    review_progress = UserReviewProgress.objects.filter(user=request.user, is_completed=False).all()
     user_word_status = UserWordStatus.objects.filter(user=request.user, is_correct=False).first()
     
     # POSTリクエスト
@@ -25,12 +24,10 @@ def select_quiz(request):
         
         # 「前回の続きから」はuser_progress.idからデータを取得し、再開する
         elif selection == 'continue':
-            user_progress_data = UserProgress.objects.filter(user=request.user, is_completed=False).all()
-            return render(request, 'flashcard/show_paused_data.html', {'user_progress_data': user_progress_data})
+            return render(request, 'flashcard/show_paused_data.html', {'user_progress_data': user_progress})
         # 復習モードの続き
         elif selection == 'review_continue':
-            review_progress_data = UserReviewProgress.objects.filter(user=request.user, is_completed=False).all()
-            return render(request, 'flashcard/show_review_paused_data.html', {'review_progress_data': review_progress_data})
+            return render(request, 'flashcard/show_review_paused_data.html', {'review_progress_data': review_progress})
         # 復習モード
         elif selection == 'review':
             return render(request, 'flashcard/review_select_mode.html')
@@ -45,7 +42,7 @@ def select_quiz(request):
         
         # quiz_modeを取得できないか、上記以外の場合はuser_homeへ
         else:
-            messages.error(request, 'エラーが発生しました。最初からお願いします。')
+            messages.error(request, 'モードを取得できません。最初からお願いします。')
             return redirect('user_home')
     
     # GETリクエストの場合、contextに進行状況と正誤データを渡し、select_quiz.htmlにレンダリング
@@ -129,17 +126,12 @@ def quiz(request):
     elif replay:
         # UserWordStatusから選択したモードの単語を全て取得
         replay_all_questions = UserWordStatus.objects.filter(user=request.user, mode=mode)
-        # print(len(replay_all_questions))
         # そこから単語のidを取得
         replay_all_questions_id = replay_all_questions.values_list('word_id', flat=True)
-        # print(replay_all_questions_id)
         # 選択したlevelでフィルタリングされたwordsからreplay_all_questions_idの単語を取得
         replay_questions = words.filter(id__in=replay_all_questions_id)
-        # print(replay_questions)
         total_questions = len(replay_questions)
-        # print(total_questions)
         questions = random.sample(list(replay_questions.values_list('id', flat=True)), total_questions)
-        # print(questions)
         if questions:
             messages.success(request, 'リプレイモードで開始します')
             pass
@@ -299,7 +291,7 @@ def check_review_answer(request, progress_id):
                 messages.error(request, '残念')
 
         # UserWordStatusの更新または作成（ユーザーごとの正解状態とモードを保存）
-        user_word_status, created = UserWordStatus.objects.get_or_create(
+        user_word_status, _ = UserWordStatus.objects.get_or_create(
             user=request.user,
             word=current_question,
             mode=review_progress.mode  # モードを追加
@@ -463,7 +455,7 @@ def result(request, progress_id):
         'correct_answer_rate':correct_answer_rate,
         'user_progress': user_progress,
     }
-    # テストモードの場合
+    # テストモードの場合、一旦5問で作成
     if user_progress.total_questions == 5:
         return render(request, 'flashcard/test_result.html', context)
     
@@ -489,6 +481,8 @@ def review_result(request, progress_id):
 
 
 '''
+from django.http import Http404, HttpResponse
+
 2024/9/16 コードはオッケー。UI変更のため一旦コメントアウトし保存
 # 問題数セレクト
 def select_num_questions(request):

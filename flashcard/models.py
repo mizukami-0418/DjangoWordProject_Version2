@@ -2,7 +2,7 @@ from django.db import models
 from accounts.models import CustomUser
 from dictionary.models import Word
 from dictionary.models import Level
-
+from django.db.models import JSONField
 
 # 通常モードとテストモードの進行状況
 class UserProgress(models.Model):
@@ -12,7 +12,7 @@ class UserProgress(models.Model):
     score = models.IntegerField(default=0) # スコア（正解数）
     total_questions = models.IntegerField(default=0) # 問題数のトータル
     current_question_index = models.IntegerField(default=0) # 現在の問題インデックス
-    question_ids = models.TextField(blank=0, null=True) # 出題された問題のIDリストをシリアライズして保存
+    question_ids = JSONField(blank=True, null=True) # 出題された問題のIDリストをシリアライズして保存
     completed_at = models.DateTimeField(auto_now_add=True) # 完了日時
     is_completed = models.BooleanField(default=False) # 完了しているかどうか
     is_paused = models.BooleanField(default=False) # 中断データがあるか
@@ -24,7 +24,6 @@ class UserProgress(models.Model):
     
     def __str__(self):
         return self.user.username
-        # return f"{self.user.username} - {self.level.name} - {self.mode}: {self.score}/{self.total_questions}"
 
 
 # 単語ごとの正誤履歴
@@ -40,7 +39,6 @@ class UserWordStatus(models.Model):
         db_table = 'user_word_status'
         verbose_name = '正解ステータス情報'
         verbose_name_plural = '正解ステータス情報'
-
 
 # 復習モードの進行状況
 class UserReviewProgress(models.Model):
