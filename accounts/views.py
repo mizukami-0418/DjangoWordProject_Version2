@@ -87,8 +87,3 @@ class CustomPasswordChangeView(PasswordChangeView):
 @login_required
 def password_change_done(request):
     return render(request, 'accounts/password_change_done.html')
-
-
-    # def get_success_url(self):
-    #     pk = self.kwargs['pk']
-    #     return reverse('password_change_done', kwargs={'pk': pk})

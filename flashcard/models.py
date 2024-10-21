@@ -59,21 +59,3 @@ class UserReviewProgress(models.Model):
         
     def __str__(self):
         return self.user.username
-
-
-'''
-class AnswerHistory(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)  # 回答者
-    question = models.ForeignKey(Word, on_delete=models.CASCADE)  # 問題（単語）
-    is_correct = models.BooleanField(default=False)  # 正誤の記録
-    mode = models.CharField(max_length=10)  # モード (例: 'en', 'jp')
-    answered_at = models.DateTimeField(auto_now_add=True)  # 回答日時
-    
-    class Meta:
-        db_table = 'answer_history'
-        verbose_name = '回答履歴'
-        verbose_name_plural = '回答履歴'
-
-    def __str__(self):
-        return f"{self.user.username} - {self.question.english} - Mode: {self.mode} - {'正解！' if self.is_correct else '不正解'}"
-'''
