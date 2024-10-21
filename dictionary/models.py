@@ -36,7 +36,7 @@ class Word(models.Model):
     english = models.CharField(max_length=255, verbose_name='英語', db_index=True, unique=True) # 英語
     japanese = models.CharField(max_length=255, verbose_name='日本語', db_index=True) # 日本語
     part_of_speech = models.ForeignKey(PartOfSpeech, on_delete=models.CASCADE, verbose_name='品詞', related_name='part_of_speech') # 品詞
-    phrase = models.TextField(blank=True, verbose_name='成句') # 成句や例文
+    phrase = models.TextField(blank=True, null=True, verbose_name='成句') # 成句や例文
     level = models.ForeignKey(Level, on_delete=models.CASCADE, verbose_name='難易度', related_name='level') # 難易度
     
     class Meta:

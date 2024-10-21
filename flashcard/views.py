@@ -438,7 +438,6 @@ def reset_review_progress(request, progress_id):
     return render(request, 'flashcard/show_review_paused_data.html', {'review_progress_data': review_progress_data})
 
 
-
 # 単語帳モードの最終結果を表示する関数
 @login_required
 def result(request, progress_id):
