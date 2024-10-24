@@ -1,7 +1,17 @@
+body {
+    background-color: #d1ffff;
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+    font-family: "Kosugi Maru", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .btn {
     display: inline-block;
     padding: 12px 24px;
-    background-color: #007bff;  /* 青色 */
+    background-color: #007bff;
     color: #ffffff;
     text-align: center;
     text-decoration: none;
@@ -10,5 +20,5 @@
 }
 
 .btn:hover {
-    background-color: #0056b3;  /* ホバー時に少し暗い青色に */
+    background-color: #0056b3;
 }
