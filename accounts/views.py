@@ -1,13 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from .forms import UserRegistrationForm, UserLoginForm, UserEditForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
-from .models import CustomUser
 
-# Create your views here.
+
 def home(request):
     return render(request, 'home.html')
 
@@ -84,9 +83,6 @@ class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'accounts/change_password.html'
     success_url = reverse_lazy('password_change_done')
 
-    # def get_success_url(self):
-    #     pk = self.kwargs['pk']
-    #     return reverse('password_change_done', kwargs={'pk': pk})
 
 @login_required
 def password_change_done(request):

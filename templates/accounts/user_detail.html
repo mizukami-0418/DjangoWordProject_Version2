@@ -1,10 +1,11 @@
-<!-- templates/user_detail.html -->
+<!-- templates/accounts/user_detail.html -->
+
 {% extends "base.html" %}
 
 {% block title %}detail{% endblock title %}
 
 {% block content %}
-<h1>ユーザー情報詳細</h1>
+<h1>ユーザー情報</h1>
 {% include "includes/message.html" %}
 <h4>
     {{ request.user.username }}さんのユーザー情報です<br>

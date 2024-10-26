@@ -1,4 +1,7 @@
+<!-- templates/flashcard/last_check_review_answer.html -->
+
 {% extends "base.html" %}
+{% block title %}LastCheckReview{% endblock %}
 {% block content %}
 <h2>復習モード</h2>
 <h5>{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h5>

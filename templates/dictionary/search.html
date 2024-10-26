@@ -1,3 +1,5 @@
+<!-- templates/dictionary/search.html -->
+
 {% extends "base.html" %}
 {% block title %}Search{% endblock %}
 {% block content %}
@@ -9,21 +11,6 @@
     <p><input type="text" name="query" value="{{ query }}" placeholder="英語または日本語で検索"></p>
     <p><button type="submit">検索結果</button></p>
 </form>
-{% comment %} {% if results %}
-<h3>検索結果</h3>
-{% for result in results %}
-<ul>
-    <li>英語：{{ result.english }}</li>
-    <li>日本語：{{ result.japanese }}</li>
-    <li>品詞：{{ result.part_of_speech }}</li>
-    {% if result.phrase %}
-    <li>成句：{{ result.phrase }}</li>
-    {% endif %}
-</ul>
-{% endfor %}
-{% else %}
-<p>見つかりませんでした</p>
-{% endif %} {% endcomment %}
 <p><a href="{% url 'detail' %}">ユーザー情報へ戻る</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>

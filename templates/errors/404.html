@@ -1,3 +1,5 @@
+<!-- templates/errors/404.html -->
+
 {% extends "base_error.html" %}
 {% block title %}NOT FOUND{% endblock %}
 {% block content %}
@@ -5,7 +7,9 @@
 <p>お探しのページは見つかりませんでした。</p>
 <p>下記のリンクより移動をお願いします。</p>
 <p><a href="{% url 'home' %}">トップページ</a></p>
-<p><a href="{% url 'user_home' %}">ホーム</a></p>
-<p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
-<p><a href="{% url 'logout' %}">ログアウト</a></p>
+{% if user %}
+    <p><a href="{% url 'user_home' %}">ホーム</a></p>
+    <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
+    <p><a href="{% url 'logout' %}">ログアウト</a></p>
+{% endif %}
 {% endblock %}
