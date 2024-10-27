@@ -5,7 +5,7 @@
 {% block title %}EDIT{% endblock %}
 
 {% block content %}
-<h1>ユーザー情報更新</h1>
+<h1 class="title">ユーザー情報更新</h1>
 <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}

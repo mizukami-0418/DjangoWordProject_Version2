@@ -3,13 +3,30 @@
 {% extends "base.html" %}
 {% block title %}新規登録{% endblock title %}
 {% block content %}
-<h1>新規登録</h1>
-<h4>ことばポケットへようこそ！！！</h4>
-<h4>こちらより新規登録お願いします</h4>
-<form method="POST">
+<h1 class="title">Let's Make an Account!</h1>
+<h4 class="mb-3">ことばポケットへようこそ！！！<br>こちらより新規登録お願いします</h4>
+<form method="POST" class="form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">新規登録</button>
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <div class="mb-3">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+    </div>
+    <div class="mb-3">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+    </div>
+    <div class="mb-3">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+    </div>
+    <div class="mb-3">
+        {{ form.confirm_password.label_tag }}
+        {{ form.confirm_password }}
+    </div>
+    <div class="button">
+        <button class="custom-button mb-3" type="submit">新規登録</button>
+    </div>
 </form>
 <p>登録済みの方は<a href="{% url 'login' %}">こちら</a></p>
 <p><a href="{% url 'home' %}">トップページへ戻る</a></p>

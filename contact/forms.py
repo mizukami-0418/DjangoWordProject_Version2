@@ -12,8 +12,8 @@ class InquiryForm(forms.ModelForm):
             'context': '問い合わせ内容',
         }
         widgets = {
-            'subject': forms.TextInput(attrs={'placeholder': '件名'}),
-            'context': forms.Textarea(attrs={'placeholder': 'お問い合わせ内容をご記入ください'}),
+            'subject': forms.TextInput(attrs={'placeholder': '件名', 'class': 'form-control'}),
+            'context': forms.Textarea(attrs={'placeholder': 'お問い合わせ内容をご記入ください', 'class': 'form-control'}),
         }
     
     def clean_subject(self):

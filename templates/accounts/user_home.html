@@ -5,15 +5,30 @@
 {% block title %}USER HOME{% endblock %}
 
 {% block content %}
-<h1>ことばポケット</h1>
+<h1 class="title">ことばポケット</h1>
 {% include "templates/includes/message.html" %}
 <h4>{{ request.user.username }}さんこんにちは！</h4>
-<h5>最初にモードを選択してね</h5>
-
-<p><a href="{% url 'search' %}" class="btn">辞書モード</a></p>
-<p><a href="{% url 'select_quiz'%}" class="btn">単語帳モード</a></p>
+<h5 class="my-3 text-center">最初にモードを選択してね</h5>
+<div class="description">
+    <div class="mb-3">
+        <strong>『DICTIONARY』</strong>モードは辞書機能です。<br>
+        調べたい単語を入力し、結果を出力します。<br>
+        英訳、和訳に対応しています。<br>
+    </div>
+    <div class="mb-3">
+        英訳：「りんご」を入力 → 「apple」を出力<br>
+        和訳：「apple」を入力 → 「りんご,林檎」を出力
+    </div>
+    <div class="mb-3">
+        <strong>『FLASHCARD』</strong>モードは単語帳機能です。<br>
+        4種類のレベルから選べるよ。<br>
+        英訳と和訳の2種類から選んでね。<br>
+        その他にもいろいろなモードがあるので、<br>ぜひ遊んでみてください。
+    </div>
+</div>
+<p><a href="{% url 'search' %}" class="custom-button">DICTIONARY</a></p>
+<p><a href="{% url 'select_quiz'%}" class="custom-button">FLASHCARD</a></p>
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'contact' %}">問い合わせ</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
-
 {% endblock %}

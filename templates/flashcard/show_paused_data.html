@@ -3,10 +3,10 @@
 {% extends "base.html" %}
 {% block title %}SELECT CONTINUE{% endblock %}
 {% block content %}
-<h2>中断したクイズ</h2>
+<h2 class="title">セーブデータ</h2>
 {% include "templates/includes/message.html" %}
 {% if user_progress_data %}
-<table class="table">
+<table class="table table-sm">
     <thead>
         <tr>
             <th scope="col">レベル</th>
@@ -29,15 +29,15 @@
             <td>{{ user_progress.score }}</td>
             <td>{{ user_progress.score }} / {{ user_progress.current_question_index }}</td>
             <td>
-                <form method="post" action="{% url 'quiz_restart' user_progress.id %}">
+                <form method="POST" action="{% url 'quiz_restart' user_progress.id %}">
                     {% csrf_token %}
-                    <button type="submit">再開</button>
+                    <button class="small-button" type="submit">再開</button>
                 </form>
             </td>
             <td>
-                <form method="post" action="{% url 'reset_user_progress' user_progress.id %}">
+                <form method="POST" action="{% url 'reset_user_progress' user_progress.id %}">
                     {% csrf_token %}
-                    <button type="submit">削除</button>
+                    <button class="small-button" type="submit">削除</button>
                 </form>
             </td>
         </tr>
@@ -45,7 +45,7 @@
     </tbody>
 </table>
 {% else %}
-    <p>中断したクイズはありません。</p>
+    <p>中断データはありません。</p>
 {% endif %}
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>

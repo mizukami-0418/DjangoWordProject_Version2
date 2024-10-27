@@ -3,11 +3,21 @@
 {% extends "base.html" %}
 {% block title %}CONTACT{% endblock %}
 {% block content %}
-<h2>お問い合わせ</h2>
+<h2 class="text-center my-3">CONTACT</h2>
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">送信</button>
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <div class="mb-3">
+        {{ form.subject.label_tag }}
+        {{ form.subject }}
+    </div>
+    <div class="mb-3">
+        {{ form.context.label_tag }}
+        {{ form.context }}
+    </div>
+    <div class="button">
+        <button class="custom-button mb-3" type="submit">送信</button>
+    </div>
 </form> 
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>

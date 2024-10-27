@@ -5,46 +5,45 @@
 {% block content %}
 
 <button type="button" onclick="history.back()">戻る</button>
-<h2>単語帳モード</h2>
+<h2 class="title">単語帳モード</h2>
 {% if user_progress and user_word_status %}
-<p>クイズモードを選択してください</p>
+<h4 class="text-center mb-3">クイズモードを選択してください</h4>
 {% elif user_progress is None and user_word_status %}
-<p>最初から始めますか？それとも復習しますか？</p>
+<h4 class="text-center mb-3">最初から始めますか？それとも復習しますか？</h4>
 {% elif user_progress and user_word_status is None %}
-<p>最初から始めますか？それとも続きからプレイしますか？</p>
+<h4 class="text-center mb-3">最初から始めますか？それとも続きからプレイしますか？</h4>
 {% else %}
-<p>クイズを最初から始めます!!</p>
+<h4 class="text-center mb-3">クイズを最初から始めます!!</h4>
 {% endif %}
-<form method="post">
+<form method="POST">
     {% csrf_token %}
-    <p>最初からゲームを始めます</p>
-    <p><button type="submit" name="quiz_mode" value="new">最初から</button></p>
+    <p class="text-center">最初からゲームを始めます</p>
+    <p><button class="custom-button" type="submit" name="quiz_mode" value="new">最初から</button></p>
 
     {% if user_progress %}
-    <p>「最初から」の続きから再開</p>
-    <p><button type="submit" name="quiz_mode" value="continue">続きから</button></p>
+    <p class="text-center">「最初から」の続きから再開</p>
+    <p><button class="custom-button" type="submit" name="quiz_mode" value="continue">続きから</button></p>
     {% endif %}
 
     {% if user_word_status %}
-    <p>間違った問題を再度学習します</p>
-    <p><button type="submit" name="quiz_mode" value="review">復習モード</button></p>
+    <p class="text-center">間違った問題を再度学習します</p>
+    <p><button class="custom-button" type="submit" name="quiz_mode" value="review">復習モード</button></p>
     {% endif %}
 
     {% if review_progress %}
-    <p>「復習モード」を続きから再開</p>
-    <p><button type="submit" name="quiz_mode" value="review_continue">復習モードの続きから</button></p>
+    <p class="text-center">「復習モード」を続きから再開</p>
+    <p><button class="custom-button" type="submit" name="quiz_mode" value="review_continue">復習モードの続きから</button></p>
     {% endif %}
 
     {% if user_word_status %}
-    <p>回答した問題をもう一度回答します</p>
-    <p><button type="submit" name="quiz_mode" value="replay">リプレイモード</button></p>
+    <p class="text-center">回答した問題をもう一度回答します</p>
+    <p><button class="custom-button" type="submit" name="quiz_mode" value="replay">リプレイモード</button></p>
     {% endif %}
     
-    <p>ランダム100問のテストに挑戦！</p>
-    <p><button type="submit" name="quiz_mode" value="test">テストモード</button></p>
+    <p class="text-center">ランダム100問のテストに挑戦！</p>
+    <p><button class="custom-button" type="submit" name="quiz_mode" value="test">テストモード</button></p>
 </form>
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
 {% endblock %}
-

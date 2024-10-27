@@ -3,13 +3,15 @@
 {% extends "base.html" %}
 {% block title %}ReviewSelectMode{% endblock %}
 {% block content %}
-<h2>復習モード</h2>
-<h6>モードを選択してください</h6>
-<form method="post" action="{% url 'start_review'  %}">
+<h2 class="title">復習モード</h2>
+<h4 class="text-center">モードを選択してください</h4>
+<form method="POST" action="{% url 'start_review'  %}">
     {% csrf_token %}
-    <div>
-        <p><button type="submit" name="mode" value="en">英訳</button></p>
-        <p><button type="submit" name="mode" value="ja">和訳</button></p>
+    <div class="button mb-3">
+        <button class="custom-button" type="submit" name="mode" value="en">英　訳</button>
+    </div>
+    <div class="button mb-3">
+        <button class="custom-button" type="submit" name="mode" value="ja">和　訳</button>
     </div>
 </form>
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>

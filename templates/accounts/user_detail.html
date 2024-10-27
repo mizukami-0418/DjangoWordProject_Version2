@@ -5,18 +5,16 @@
 {% block title %}detail{% endblock title %}
 
 {% block content %}
-<h1>ユーザー情報</h1>
+<h1 class="title">ユーザー情報</h1>
 {% include "includes/message.html" %}
-<h4>
+<h4 class="text-center mb-5">
     {{ request.user.username }}さんのユーザー情報です<br>
     変更は下記からどうぞ
 </h4>
-<p>ユーザー名<br>{{ request.user.username }}</p>
-<p>メールアドレス<br>{{ request.user.email }}</p>
-<ul>
-    <li><a href="{% url 'edit' %}">ユーザー情報変更はこちら</a></li>
-    <li><a href="{% url 'password_change' %}">パスワード変更はこちら</a></li>
-    <li><a href="{% url 'user_home' %}">ホームへ戻る</a></li>
-    <li><a href="{% url 'logout' %}">ログアウト</a></li>
-</ul>
+<h5 class="text-center mb-3">ユーザー名：{{ request.user.username }}</h5>
+<h5 class="text-center mb-3">メールアドレス：{{ request.user.email }}</h5>
+<p><a href="{% url 'edit' %}">ユーザー情報変更はこちら</a></p>
+<p><a href="{% url 'password_change' %}">パスワード変更はこちら</a></p>
+<p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
+<p><a href="{% url 'logout' %}">ログアウト</a></p>
 {% endblock %}

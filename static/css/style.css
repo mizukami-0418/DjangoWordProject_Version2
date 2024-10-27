@@ -1,11 +1,36 @@
 body {
-    background-color: white;
+    background-color: #E7E7FF;
+    color: #515151;
     max-width: 1000px;
     width: 100%;
     margin: auto;
     font-family: "Kosugi Maru", sans-serif;
     font-weight: 400;
     font-style: normal;
+}
+
+p {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+table {
+    border-radius: 10px;
+}
+
+td {
+    text-align: center;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: black;
+    font-weight: 900;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .btn {
@@ -19,6 +44,42 @@ body {
     font-size: 16px;
 }
 
+.custom-button {
+    display: inline-block;
+    width: 240px;
+    max-width: 320px;
+    min-width: 120px;
+    padding: 12px 24px;
+    background-color: white;
+    color: #515151;
+    text-align: center;
+    border-radius: 24px;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.custom-button:hover {
+    background-color: #B3B3FF;
+}
+
+.small-button {
+    width: 48px;
+    background-color: white;
+    color: #515151;
+    text-align: center;
+    border-radius: 16px;
+    border-color: #515151;
+}
+
+.small-button:hover {
+    background-color: #B3B3FF;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+}
+
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #B3B3FF;
 }
