@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1 class="title">Dictionary Mode</h1>
-<h4 class="text-center">調べたい単語を検索できますよ</h4>
+<h4>調べたい単語を検索できますよ</h4>
 <h4>英語か日本語で入力してください</h4>
 <form method="GET" action="{% url 'search' %}">
     <p><input type="text" name="query" value="{{ query }}" placeholder="英語or日本語で検索" class="form-control"></p>

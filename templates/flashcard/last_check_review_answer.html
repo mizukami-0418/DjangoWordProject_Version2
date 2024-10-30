@@ -4,9 +4,9 @@
 {% block title %}LastCheckReview{% endblock %}
 {% block content %}
 <h2 class="title">復習モード</h2>
-<h4 class="text-center">{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
+<h4>{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
 {% include "templates/includes/message.html" %}
-<h4 class="text-center">解答</h4>
+<h4>解　答</h4>
 <p>英語：{{ current_question }}</p>
 <p>日本語：{{ current_question.japanese }}</p>
 <p>品詞：{{ current_question.part_of_speech }}</p>

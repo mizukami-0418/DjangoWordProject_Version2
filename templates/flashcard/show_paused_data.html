@@ -3,6 +3,7 @@
 {% extends "base.html" %}
 {% block title %}SELECT CONTINUE{% endblock %}
 {% block content %}
+<button class="back-button mt-3" type="button" onclick="history.back()">戻る</button>
 <h2 class="title">セーブデータ</h2>
 {% include "templates/includes/message.html" %}
 {% if user_progress_data %}

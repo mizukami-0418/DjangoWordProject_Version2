@@ -4,13 +4,14 @@
 {% block title %}TestResult{% endblock %}
 {% block content %}
 <h2 class="title">テストモード</h2>
-<h4 class="text-center">{{ user_progress.level.name }}クラス</h4>
-<h4 class="text-center">{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
-<h4 class="text-center">得点：{{ user_progress.score }}点</h4>
+<h3>お疲れ様でした！！！！</h3>
+<h4>{{ user_progress.level.name }}クラス</h4>
+<h4>{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
+<h4>得点：{{ user_progress.score }}点</h4>
 <p>正解数：{{ user_progress.score }} / {{ user_progress.total_questions }}</p>
 <p>正答率：{{ correct_answer_rate }}%</p>
-<h4 class="text-center">続ける場合はホームへ</h4>
-<h4 class="text-center">終了する場合はログアウト</h4>
+<h4>続ける場合はホームへ</h4>
+<h4>終了する場合はログアウト</h4>
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>

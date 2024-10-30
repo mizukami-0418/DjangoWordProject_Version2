@@ -5,11 +5,22 @@
 {% block title %}EDIT{% endblock %}
 
 {% block content %}
+<button class="back-button mt-3" type="button" onclick="history.back()">戻る</button>
 <h1 class="title">ユーザー情報更新</h1>
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type='submit'>更新</button>
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <div class="mb-3">
+        {{ form.email.label_tag }}
+        {{ form.email }}
+    </div>
+    <div class="mb-3">
+        {{ form.username.label_tag }}
+        {{ form.username }}
+    </div>
+    <div class="button mb-3">
+        <button class="custom-button" type='submit'>更新</button>
+    </div>
 </form>
 <p><a href="{% url 'detail' %}">ユーザー情報へ戻る</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>

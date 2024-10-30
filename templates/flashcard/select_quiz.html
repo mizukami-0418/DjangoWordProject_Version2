@@ -4,39 +4,39 @@
 {% block title %}SelectQuiz{% endblock %}
 {% block content %}
 
-<button type="button" onclick="history.back()">戻る</button>
-<h2 class="title">単語帳モード</h2>
+<button class="back-button mt-3" type="button" onclick="history.back()">戻る</button>
+<h2 class="title">Flashcard Mode</h2>
 {% if user_progress and user_word_status %}
-<h4 class="text-center mb-3">クイズモードを選択してください</h4>
+<h4>クイズモードを選択してください</h4>
 {% elif user_progress is None and user_word_status %}
-<h4 class="text-center mb-3">最初から始めますか？それとも復習しますか？</h4>
+<h4>最初から始めますか？それとも復習しますか？</h4>
 {% elif user_progress and user_word_status is None %}
-<h4 class="text-center mb-3">最初から始めますか？それとも続きからプレイしますか？</h4>
+<h4>最初から始めますか？それとも続きからプレイしますか？</h4>
 {% else %}
-<h4 class="text-center mb-3">クイズを最初から始めます!!</h4>
+<h4>クイズを最初から始めます!!</h4>
 {% endif %}
 <form method="POST">
     {% csrf_token %}
-    <p class="text-center">最初からゲームを始めます</p>
+    <p>最初からゲームを始めます</p>
     <p><button class="custom-button" type="submit" name="quiz_mode" value="new">最初から</button></p>
 
     {% if user_progress %}
-    <p class="text-center">「最初から」の続きから再開</p>
+    <p>「最初から」の続きから再開</p>
     <p><button class="custom-button" type="submit" name="quiz_mode" value="continue">続きから</button></p>
     {% endif %}
 
     {% if user_word_status %}
-    <p class="text-center">間違った問題を再度学習します</p>
+    <p>間違った問題を再度学習します</p>
     <p><button class="custom-button" type="submit" name="quiz_mode" value="review">復習モード</button></p>
     {% endif %}
 
     {% if review_progress %}
-    <p class="text-center">「復習モード」を続きから再開</p>
+    <p>「復習モード」を続きから再開</p>
     <p><button class="custom-button" type="submit" name="quiz_mode" value="review_continue">復習モードの続きから</button></p>
     {% endif %}
 
     {% if user_word_status %}
-    <p class="text-center">回答した問題をもう一度回答します</p>
+    <p>回答した問題をもう一度回答します</p>
     <p><button class="custom-button" type="submit" name="quiz_mode" value="replay">リプレイモード</button></p>
     {% endif %}
     

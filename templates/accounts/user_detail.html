@@ -5,14 +5,15 @@
 {% block title %}detail{% endblock title %}
 
 {% block content %}
+<button class="back-button mt-3" type="button" onclick="history.back()">戻る</button>
 <h1 class="title">ユーザー情報</h1>
 {% include "includes/message.html" %}
-<h4 class="text-center mb-5">
+<h4>
     {{ request.user.username }}さんのユーザー情報です<br>
     変更は下記からどうぞ
 </h4>
-<h5 class="text-center mb-3">ユーザー名：{{ request.user.username }}</h5>
-<h5 class="text-center mb-3">メールアドレス：{{ request.user.email }}</h5>
+<h5>ユーザー名：{{ request.user.username }}</h5>
+<h5>メールアドレス：{{ request.user.email }}</h5>
 <p><a href="{% url 'edit' %}">ユーザー情報変更はこちら</a></p>
 <p><a href="{% url 'password_change' %}">パスワード変更はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>

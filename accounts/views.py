@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .forms import UserRegistrationForm, UserLoginForm, UserEditForm, CustomPasswordChangeForm
+from .forms import UserRegistrationForm, UserLoginForm, UserEditForm, CustomPasswordChangeForm, CustomSetPasswordForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmView
 from django.urls import reverse_lazy
 
 
@@ -83,6 +83,18 @@ class CustomPasswordChangeView(PasswordChangeView):
     form_class = CustomPasswordChangeForm
     template_name = 'accounts/change_password.html'
     success_url = reverse_lazy('password_change_done')
+    
+    def form_invalid(self, form):
+        # 各フィールドのエラーメッセージを取得し、messages.errorに追加
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"{form.fields[field].label}: {error}")
+        return super().form_invalid(form)
+    
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    form_class = CustomSetPasswordForm
+    template_name = 'registration/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
     
     def form_invalid(self, form):
         # 各フィールドのエラーメッセージを取得し、messages.errorに追加
