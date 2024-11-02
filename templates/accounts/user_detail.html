@@ -12,8 +12,10 @@
     {{ request.user.username }}さんのユーザー情報です<br>
     変更は下記からどうぞ
 </h4>
-<h5>ユーザー名：{{ request.user.username }}</h5>
-<h5>メールアドレス：{{ request.user.email }}</h5>
+<div class="description">
+    <h5>ユーザー名：{{ request.user.username }}</h5>
+    <h5>メールアドレス：{{ request.user.email }}</h5>
+</div>
 <p><a href="{% url 'edit' %}">ユーザー情報変更はこちら</a></p>
 <p><a href="{% url 'password_change' %}">パスワード変更はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
