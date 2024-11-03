@@ -73,7 +73,6 @@ def get_quiz_session_data(request):
     # セッションから難易度、モード、問題数を取得して返す
     level_id = request.session.get('level_id')
     mode = request.session.get('mode')
-    # num_questions = request.session.get('num_questions')
     
     level = get_object_or_404(Level, id=level_id)
     
@@ -116,7 +115,6 @@ def quiz(request):
         return redirect('select_level')
     
     words = Word.objects.filter(level_id=level.id) # 選択した難易度の単語を全て抽出
-    # 抽出した単語が選択した出題数より少ない場合、エラーにならないための処理
     
     # テストモードの場合、ランダムで5問出題する
     if test: 

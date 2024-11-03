@@ -5,6 +5,8 @@ from .forms import UserRegistrationForm, UserLoginForm, UserEditForm, CustomPass
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmView
 from django.urls import reverse_lazy
+from dictionary.models import Word
+from flashcard.models import UserWordStatus
 
 
 def home(request):
@@ -61,7 +63,62 @@ def user_home(request):
 # ユーザー詳細画面
 @login_required
 def user_detail(request):
-    return render(request, 'accounts/user_detail.html')
+    # 各難易度の問題総数を算出
+    beginner_all_counts = Word.objects.filter(level='1').count()
+    intermediate_all_counts = Word.objects.filter(level='2').count()
+    advanced_all_counts = Word.objects.filter(level='3').count()
+    expert_all_counts = Word.objects.filter(level='4').count()
+    # ユーザーの回答実績を取得
+    words_status = UserWordStatus.objects.filter(user=request.user)
+    
+    # beginnerの回答数と正解数をモードごとに取得
+    beginner_count_en = words_status.filter(word__level='1', mode='en').count()
+    beginner_count_ja = words_status.filter(word__level='1', mode='ja').count()
+    beginner_correct_en = words_status.filter(word__level='1', mode='en', is_correct=True).count()
+    beginner_correct_ja = words_status.filter(word__level='1', mode='ja', is_correct=True).count()
+    
+    # intermediate
+    intermediate_count_en = words_status.filter(word__level='2', mode='en').count()
+    intermediate_count_ja = words_status.filter(word__level='2', mode='ja').count()
+    intermediate_correct_en = words_status.filter(word__level='2', mode='en', is_correct=True).count()
+    intermediate_correct_ja = words_status.filter(word__level='2', mode='ja', is_correct=True).count()
+    
+    # advanced
+    advanced_count_en = words_status.filter(word__level='3', mode='en').count()
+    advanced_count_ja = words_status.filter(word__level='3', mode='ja').count()
+    advanced_correct_en = words_status.filter(word__level='3', mode='en', is_correct=True).count()
+    advanced_correct_ja = words_status.filter(word__level='3', mode='ja', is_correct=True).count()
+    
+    # expert
+    expert_count_en = words_status.filter(word__level='4', mode='en').count()
+    expert_count_ja = words_status.filter(word__level='4', mode='ja').count()
+    expert_correct_en = words_status.filter(word__level='4', mode='en', is_correct=True).count()
+    expert_correct_ja = words_status.filter(word__level='4', mode='ja', is_correct=True).count()
+    
+    context = {
+        'beginner_all_counts': beginner_all_counts,
+        'intermediate_all_counts': intermediate_all_counts,
+        'advanced_all_counts': advanced_all_counts,
+        'expert_all_counts': expert_all_counts,
+        'beginner_count_en': beginner_count_en,
+        'beginner_count_ja': beginner_count_ja,
+        'beginner_correct_en': beginner_correct_en,
+        'beginner_correct_ja': beginner_correct_ja,
+        'intermediate_count_en': intermediate_count_en,
+        'intermediate_count_ja': intermediate_count_ja,
+        'intermediate_correct_en': intermediate_correct_en,
+        'intermediate_correct_ja': intermediate_correct_ja,
+        'advanced_count_en': advanced_count_en,
+        'advanced_count_ja': advanced_count_ja,
+        'advanced_correct_en': advanced_correct_en,
+        'advanced_correct_ja': advanced_correct_ja,
+        'expert_count_en': expert_count_en,
+        'expert_count_ja': expert_count_ja,
+        'expert_correct_en': expert_correct_en,
+        'expert_correct_ja': expert_correct_ja,
+    }
+    
+    return render(request, 'accounts/user_detail.html', context)
 
 # ユーザー編集
 @login_required
