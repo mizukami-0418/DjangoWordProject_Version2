@@ -3,9 +3,9 @@
 {% extends "base.html" %}
 {% block title %}ReviewQuiz{% endblock %}
 {% block content %}
-<h2>復習モード</h2>
-<h5>{% if review_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h5>
-<h6>クイズ画面</h6>
+<h2 class="title">復習モード</h2>
+<h4>{% if review_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
+<h4>クイズ画面</h4>
 {% comment %} 実装確認のために出力 {% endcomment %}
 <ul>
     <li>{{ current_question }}</li>
@@ -14,25 +14,29 @@
     <li>{{ current_question.phrase }}</li>
 </ul>
 <h4>全{{ review_progress.total_questions }}問</h4>
-<h6>第{{ review_progress.current_question_index | add:1 }}問</h6>
+<h5>第{{ review_progress.current_question_index | add:1 }}問</h5>
 
 {% if review_progress.mode == 'en' %}
 {% comment %} 英訳モード {% endcomment %}
     <p>次の日本語を英訳してください</p>
     <p>日本語：{{ current_question.japanese }}</p>
-    <form method="post" action="{% url 'check_review_answer' review_progress.id %}">
+    <form method="POST" action="{% url 'check_review_answer' review_progress.id %}">
         {% csrf_token %}
-        <p><input type="text" name="answer" id='answer' placeholder='回答を入力'></p>
-        <p><button type="submit">回答する</button></p>
+        <p><input type="text" name="answer" id='answer' placeholder='回答を入力' class="form-control"></p>
+        <div class="button mb-3">
+            <button class="custom-button" type="submit">回答する</button>
+        </div>
     </form>
 {% else %}
 {% comment %} 和訳モード {% endcomment %}
     <p>次の英語を和訳してください</p>
     <p>英語：{{ current_question }}</p>
-    <form method="post" action="{% url 'check_review_answer' review_progress.id %}">
+    <form method="POST" action="{% url 'check_review_answer' review_progress.id %}">
         {% csrf_token %}
-        <p><input type="text" name="answer" id='answer' placeholder='回答を入力'></p>
-        <p><button type="submit">回答する</button></p>
+        <p><input type="text" name="answer" id='answer' placeholder='回答を入力' class="form-control"></p>
+        <div class="button mb-3">
+            <button class="custom-button" type="submit">回答する</button>
+        </div>
     </form>
 {% endif %}
 

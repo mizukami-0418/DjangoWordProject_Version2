@@ -3,13 +3,14 @@
 {% extends "base.html" %}
 {% block title %}ReviewResult{% endblock %}
 {% block content %}
-<h2>復習モード</h2>
-<h5>{% if review_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h5>
+<h2 class="title">復習モード</h2>
+<h3>お疲れ様でした！！！！</h3>
+<h4>{% if review_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
 <h4>通算成績は・・・・・・・</h4>
 <p>正解数：{{ review_progress.score }} / {{ review_progress.total_questions }}</p>
 <p>正答率：{{ correct_answer_rate }}%</p>
-<h4>続ける場合はホームへ</h4>
-<h4>終了する場合はログアウト</h4>
+<h5>続ける場合はホームへ</h5>
+<h5>終了する場合はログアウト</h5>
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>

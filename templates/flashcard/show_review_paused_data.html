@@ -3,10 +3,11 @@
 {% extends "base.html" %}
 {% block title %}REVIEW CONTINUE{% endblock %}
 {% block content %}
-<h2>中断したクイズ</h2>
+<button class="back-button" type="button" onclick="history.back()">戻る</button>
+<h2 class="title">復習モード<br>セーブデータ</h2>
 {% include "templates/includes/message.html" %}
 {% if review_progress_data %}
-<table class="table">
+<table class="table table-sm table-striped">
     <thead>
         <tr>
             <th scope="col">モード</th>
@@ -27,15 +28,15 @@
             <td>{{ review_progress.score }}</td>
             <td>{{ review_progress.score }} / {{ review_progress.current_question_index }}</td>
             <td>
-                <form method="post" action="{% url 'review_quiz' review_progress.id %}">
+                <form method="POST" action="{% url 'review_quiz' review_progress.id %}">
                     {% csrf_token %}
-                    <button type="submit">再開</button>
+                    <button class="small-button" type="submit">再開</button>
                 </form>
             </td>
             <td>
-                <form method="post" action="{% url 'reset_review_progress' review_progress.id %}">
+                <form method="POST" action="{% url 'reset_review_progress' review_progress.id %}">
                     {% csrf_token %}
-                    <button type="submit">削除</button>
+                    <button class="small-button" type="submit">削除</button>
                 </form>
             </td>
         </tr>

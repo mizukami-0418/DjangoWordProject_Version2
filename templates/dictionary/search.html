@@ -3,15 +3,17 @@
 {% extends "base.html" %}
 {% block title %}Search{% endblock %}
 {% block content %}
-
-<h1>辞書モード</h1>
-<h4>調べたい単語を検索</h4>
+<button class="back-button" type="button" onclick="history.back()">戻る</button>
+<h1 class="title">Dictionary Mode</h1>
+<h4>調べたい単語を検索できますよ</h4>
 <h4>英語か日本語で入力してください</h4>
-<form method="get" action="{% url 'search' %}">
-    <p><input type="text" name="query" value="{{ query }}" placeholder="英語または日本語で検索"></p>
-    <p><button type="submit">検索結果</button></p>
+<form method="GET" action="{% url 'search' %}">
+    <p><input type="text" name="query" value="{{ query }}" placeholder="英語or日本語で検索" class="form-control"></p>
+    <div class="button">
+        <p><button type="submit" class="custom-button">検索結果を表示</button></p>
+    </div>
 </form>
-<p><a href="{% url 'detail' %}">ユーザー情報へ戻る</a></p>
+<p><a href="{% url 'detail' %}">ユーザー情報へ</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
 {% endblock %}

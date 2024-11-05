@@ -3,17 +3,21 @@
 {% extends "base.html" %}
 {% block title %}LastCheckReview{% endblock %}
 {% block content %}
-<h2>復習モード</h2>
-<h5>{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h5>
+<h2 class="title">復習モード</h2>
+<h4>{% if user_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
 {% include "templates/includes/message.html" %}
-<h4>解答</h4>
-<p>英語：{{ current_question }}</p>
-<p>日本語：{{ current_question.japanese }}</p>
-<p>品詞：{{ current_question.part_of_speech }}</p>
-<p>成句：{% if current_question.phrase %}{{ current_question.phrase }}{% else %}未登録{% endif %}</p>
+<h4>解　答</h4>
+<div class="description">
+    <p>英語：{{ current_question }}</p>
+    <p>日本語：{{ current_question.japanese }}</p>
+    <p>品詞：{{ current_question.part_of_speech }}</p>
+    <p>成句：{% if current_question.phrase %}{{ current_question.phrase }}{% else %}未登録{% endif %}</p>
+</div>
 <form method="POST" action="{% url 'review_result' review_progress.id %}">
     {% csrf_token %}
-    <button type="submit">結果を表示</button>
+    <div class="button mb-3">
+        <button class="custom-button" type="submit">結果を表示</button>
+    </div>
 </form>
 
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>

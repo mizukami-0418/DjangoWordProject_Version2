@@ -5,18 +5,119 @@
 {% block title %}detail{% endblock title %}
 
 {% block content %}
-<h1>ユーザー情報</h1>
+<button class="back-button" type="button" onclick="history.back()">戻る</button>
+<h1 class="title">ユーザー情報</h1>
 {% include "includes/message.html" %}
 <h4>
     {{ request.user.username }}さんのユーザー情報です<br>
-    変更は下記からどうぞ
+    変更は下のリンクからお願いします
 </h4>
-<p>ユーザー名<br>{{ request.user.username }}</p>
-<p>メールアドレス<br>{{ request.user.email }}</p>
-<ul>
-    <li><a href="{% url 'edit' %}">ユーザー情報変更はこちら</a></li>
-    <li><a href="{% url 'password_change' %}">パスワード変更はこちら</a></li>
-    <li><a href="{% url 'user_home' %}">ホームへ戻る</a></li>
-    <li><a href="{% url 'logout' %}">ログアウト</a></li>
-</ul>
+<div class="description">
+    <h5>ユーザー名：{{ request.user.username }}</h5>
+    <h5>メールアドレス：{{ request.user.email }}</h5>
+</div>
+<h3>Beginnerクラス</h3>
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th scope="col">モード</th>
+            <th scope="col">総数</th>
+            <th scope="col">回答数</th>
+            <th scope="col">正解数</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>英　訳</td>
+            <td>{{ beginner_all_counts }}</td>
+            <td>{{ beginner_count_en }}</td>
+            <td>{{ beginner_correct_en }}</td>
+        </tr>
+        <tr>
+            <td>和　訳</td>
+            <td>{{ beginner_all_counts }}</td>
+            <td>{{ beginner_count_ja }}</td>
+            <td>{{ beginner_correct_ja }}</td>
+        </tr>
+    </tbody>
+</table>
+<h3>Intermediateクラス</h3>
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th scope="col">モード</th>
+            <th scope="col">総数</th>
+            <th scope="col">回答数</th>
+            <th scope="col">正解数</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>英　訳</td>
+            <td>{{ intermediate_all_counts }}</td>
+            <td>{{ intermediate_count_en }}</td>
+            <td>{{ intermediate_correct_en }}</td>
+        </tr>
+        <tr>
+            <td>和　訳</td>
+            <td>{{ intermediate_all_counts }}</td>
+            <td>{{ intermediate_count_ja }}</td>
+            <td>{{ intermediate_correct_ja }}</td>
+        </tr>
+    </tbody>
+</table>
+<h3>Advancedクラス</h3>
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th scope="col">モード</th>
+            <th scope="col">総数</th>
+            <th scope="col">回答数</th>
+            <th scope="col">正解数</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>英　訳</td>
+            <td>{{ advanced_all_counts }}</td>
+            <td>{{ advanced_count_en }}</td>
+            <td>{{ advanced_correct_en }}</td>
+        </tr>
+        <tr>
+            <td>和　訳</td>
+            <td>{{ advanced_all_counts }}</td>
+            <td>{{ advanced_count_ja }}</td>
+            <td>{{ advanced_correct_ja }}</td>
+        </tr>
+    </tbody>
+</table>
+<h3>Expertクラス</h3>
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th scope="col">モード</th>
+            <th scope="col">総数</th>
+            <th scope="col">回答数</th>
+            <th scope="col">正解数</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>英　訳</td>
+            <td>{{ expert_all_counts }}</td>
+            <td>{{ expert_count_en }}</td>
+            <td>{{ expert_correct_en }}</td>
+        </tr>
+        <tr>
+            <td>和　訳</td>
+            <td>{{ expert_all_counts }}</td>
+            <td>{{ expert_count_ja }}</td>
+            <td>{{ expert_correct_ja }}</td>
+        </tr>
+    </tbody>
+</table>
+<p><a href="{% url 'edit' %}">ユーザー情報変更はこちら</a></p>
+<p><a href="{% url 'password_change' %}">パスワード変更はこちら</a></p>
+<p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
+<p><a href="{% url 'logout' %}">ログアウト</a></p>
 {% endblock %}

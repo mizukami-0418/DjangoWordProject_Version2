@@ -1,9 +1,31 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock title %}
 {% block content %}
-<h1>ことばポケット</h1>
+<h1 class="title">ことばポケット</h1>
 {% include "templates/includes/message.html" %}
 <h3>単語帳アプリへようこそ!</h3>
-<p><a href="{% url 'register' %}">新規登録</a></p>
-<p><a href="{% url 'login' %}">ログイン</a></p>
+<div class="description">
+    <strong>『ことばポケット』</strong>は、英単語の学習をクイズ形式で」楽しく体験できます！
+    <br>
+    <hr>
+    <strong>「辞書機能」</strong>では、日本語から英語、英語から日本語といった双方向で単語の意味を調べられます。
+    <br>
+    ちょっとした単語の確認や、例文と一緒に単語の使い方を知りたいときに、ぜひ役立ててください。
+    <br>
+    <hr>
+    <strong>「単語帳機能」</strong>は英訳や和訳をクイズ形式で回答していくモードです。
+    <br>
+    難易度ごとにモードが分かれているので、初心者から上級者まで楽しめます。
+    <br>
+    クイズで遊びながら単語力をぐんぐんアップさせましょう！
+    <br>
+    <hr>
+    このアプリを使って、日々の単語学習をもっと楽しく、効率的にしてみませんか？
+</div>
+<div class="button mt-3">
+    <p><a href="{% url 'register' %}" class="custom-button">新規登録</a></p>
+</div>
+<div class="button">
+    <p><a href="{% url 'login' %}" class="custom-button">ログイン</a></p>
+</div>
 {% endblock %} 

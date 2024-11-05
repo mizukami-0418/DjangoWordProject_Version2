@@ -8,7 +8,7 @@ from .forms import InquiryForm
 
 @login_required
 def contact_view(request):
-    success_message = 'お問い合わせを受け付けました。\n登録メールアドレスへ5営業日以内にご連絡いたします。'
+    success_message = 'お問い合わせを受け付けました。'
     if request.method == 'POST':
         form = InquiryForm(request.POST)
         if form.is_valid():
@@ -18,8 +18,12 @@ def contact_view(request):
             messages.success(request, success_message)
             return redirect('contact_result')
         else:
-            messages.error(request, '入力内容に誤りがあります。再度ご確認ください。')
+            # forms.pyのValidationErrorをメッセージに出力する
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
             return render(request, 'contact/contact.html', {'form': form})
+            
     else:
         form = InquiryForm()
     return render(request, 'contact/contact.html', {'form': form})

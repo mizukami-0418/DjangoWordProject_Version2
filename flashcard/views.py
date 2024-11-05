@@ -73,7 +73,6 @@ def get_quiz_session_data(request):
     # セッションから難易度、モード、問題数を取得して返す
     level_id = request.session.get('level_id')
     mode = request.session.get('mode')
-    # num_questions = request.session.get('num_questions')
     
     level = get_object_or_404(Level, id=level_id)
     
@@ -116,7 +115,6 @@ def quiz(request):
         return redirect('select_level')
     
     words = Word.objects.filter(level_id=level.id) # 選択した難易度の単語を全て抽出
-    # 抽出した単語が選択した出題数より少ない場合、エラーにならないための処理
     
     # テストモードの場合、ランダムで5問出題する
     if test: 
@@ -136,7 +134,7 @@ def quiz(request):
             messages.success(request, 'リプレイモードで開始します')
             pass
         else:
-            messages.success(request, '初めての挑戦です。「最初から」モードで開始してください')
+            messages.success(request, '初めての挑戦です。「最初から」で開始してください')
             return redirect('user_home')
     # 通常モードの場合
     else:
@@ -190,7 +188,7 @@ def quiz_restart(request, progress_id):
     
     # user_progressと　current_questionの両方が存在しない場合
     if not(user_progress and current_question):
-        messages.error(request, '問題がありませんでした。ホーム画面へ戻ります')
+        messages.error(request, '問題が発生しました。ホーム画面へ戻ります')
         return redirect('user_home')
     
     # contextに現在の問題と進行状況を渡し、quiz.htmlにレンダリング
@@ -275,20 +273,20 @@ def check_review_answer(request, progress_id):
         # 英訳モード
         if review_progress.mode == 'en':
             if answer == correct_answer:
-                messages.success(request, '正解！！！！')
+                messages.success(request, '正解！！この調子で頑張りましょう!')
                 review_progress.score += 1 # 正解数を１加算
                 is_correct = True # 正誤記録を更新
             else:
-                messages.error(request, '残念')
+                messages.error(request, '残念・・・次こそは正解だ！！')
         # 和訳モード
         else:
             # answerがcorrect_answerリストのいずれかの要素（日本語の正解）と一致するかを確認
             if any(answer == correct_answer_japanese.strip() for correct_answer_japanese in correct_answer):
-                messages.success(request, '正解！！！！')
+                messages.success(request, '正解！！この調子で頑張りましょう!')
                 review_progress.score += 1 # 正解数を１加算
                 is_correct = True # 正誤記録を更新
             else:
-                messages.error(request, '残念')
+                messages.error(request, '残念・・・次こそは正解だ！！')
 
         # UserWordStatusの更新または作成（ユーザーごとの正解状態とモードを保存）
         user_word_status, _ = UserWordStatus.objects.get_or_create(
@@ -333,18 +331,18 @@ def check_answer(request, progress_id):
         # 英訳モード
         if user_progress.mode == 'en':
             if answer == correct_answer:
-                messages.success(request, '正解！！！！')
+                messages.success(request, '正解！！この調子で頑張りましょう!')
                 user_progress.score += 1 # 正解数を１加算
                 is_correct = True # 正誤記録を更新
             else:
-                messages.error(request, '残念')
+                messages.error(request, '残念・・・次こそは正解だ！！')
         else: # 和訳モード
             if any(answer == correct_answer_japanese.strip() for correct_answer_japanese in correct_answer):
-                messages.success(request, '正解！！！！')
+                messages.success(request, '正解！！この調子で頑張りましょう!')
                 user_progress.score += 1 # 正解数を１加算
                 is_correct = True # 正誤記録を更新
             else:
-                messages.error(request, '残念')
+                messages.error(request, '残念・・・次こそは正解だ！！')
         
         # UserWordStatusの更新または作成（ユーザーごとの正解状態とモードを保存）
         user_word_status, created = UserWordStatus.objects.get_or_create(
