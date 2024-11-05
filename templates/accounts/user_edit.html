@@ -5,7 +5,7 @@
 {% block title %}EDIT{% endblock %}
 
 {% block content %}
-<button class="back-button mt-3" type="button" onclick="history.back()">戻る</button>
+<button class="back-button" type="button" onclick="history.back()">戻る</button>
 <h1 class="title">ユーザー情報更新</h1>
 <form method="POST">
     {% csrf_token %}

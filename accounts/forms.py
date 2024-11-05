@@ -5,7 +5,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from .models import CustomUser
 
-
+# 
 class UserRegistrationForm(forms.ModelForm):
     confirm_password = forms.CharField(label='確認用パスワード', widget=forms.PasswordInput(attrs={'placeholder': '確認用パスワード', 'class': 'form-control'}))
     

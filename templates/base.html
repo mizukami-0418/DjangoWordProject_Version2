@@ -7,6 +7,13 @@
         <span class="icon">📘</span> <!-- ポケットや本をイメージしたアイコン -->
         <h1>ことばポケット</h1>
     </div>
+{% load static %}
+<audio id="bg-music" autoplay loop>
+    <source src="{% static 'audio/ukiukilalala.mp3' %}" type="audio/mpeg">
+</audio>
+<div class="text-end">
+    <button id="music-button" onclick="toggleMusic()"><span id="music-icon">🎵</span>音楽を再生</button>
+</div>
 {% block content %}
 {% endblock %}
 </main>
