@@ -9,9 +9,6 @@ from dictionary.models import Word
 from flashcard.models import UserWordStatus
 
 
-def home(request):
-    return render(request, 'home.html')
-
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
