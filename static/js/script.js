@@ -33,10 +33,3 @@ function updateButtonText(isPlaying) {
         musicIcon.textContent = "🎵";
     }
 }
-
-// "戻る"ボタンのクリックイベントをオーバーライド
-// document.querySelector(".back-button").addEventListener("click", (event) => {
-//     event.preventDefault(); // デフォルトの動作を停止
-//     localStorage.setItem("isPlaying", isPlaying); // 状態を保存
-//     history.back();
-// });
