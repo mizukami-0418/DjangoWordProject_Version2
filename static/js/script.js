@@ -1,4 +1,5 @@
 let isPlaying = localStorage.getItem("isPlaying") === "true"; // ロード時に再生状態を取得
+// let isPlaying = false;
 const music = document.getElementById("bg-music");
 const musicButton = document.getElementById("music-button");
 const musicIcon = document.getElementById("music-icon");
@@ -17,12 +18,15 @@ function toggleMusic() {
     isPlaying = !isPlaying;
     if (isPlaying) {
         music.play();
+        // updateButtonText(true);
     } else {
         music.pause();
+        // updateButtonText(false);
     }
     localStorage.setItem("isPlaying", isPlaying); // 状態を保存
     updateButtonText(isPlaying);
 }
+
 
 function updateButtonText(isPlaying) {
     if (isPlaying) {
