@@ -9,9 +9,10 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import dj_database_url
 import os
 from pathlib import Path
+from decouple import config
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 
@@ -23,12 +24,17 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# デバッグ設定の読み込み（存在しない場合はデフォルトでFalse）
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# 接続を許可するホストをローカルとherokuのアドレスに固定
+ALLOWED_HOSTS = [
+    'flashcard-tamk-ed931c69d79f.herokuapp.com',
+    'localhost',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -45,11 +51,13 @@ INSTALLED_APPS = [
     'dictionary',
     'flashcard',
     'error',
+    'csp',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -83,12 +91,24 @@ WSGI_APPLICATION = 'wordbook.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# ローカル開発用のデータベース設定（SQLiteなど）
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# 本番環境用のデータベース設定
+'''
+DATABASE_URL = config('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=True
+    )
+'''
 
 
 # Password validation
@@ -138,6 +158,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static",]
 
+# 本番環境で静的ファイルを提供するディレクトリ
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 LOGIN_URL = '/login/'
 
 # Default primary key field type
@@ -173,7 +196,7 @@ EMAIL_HOST_PASSWORD = 'your-email-password'
 # セキュリティ設定
 
 # HTTPSリダイレクトを強制する。（開発中はFalseで設定）
-SECURE_SSL_REDIRECT = False
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
 
 # HSTSヘッダーを設定する
 SECURE_HSTS_SECONDS = 31536000  # 1 year
@@ -196,3 +219,52 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # セッションとCSRFクッキーをHTTPS経由でのみ送信する
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
+# ブラウザが不正なファイルの種類での解釈を防ぐ
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# プロジェクトルートを基準にしたログディレクトリ
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+
+# ロギングの設定
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {  # 全般ログ
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'django.log'),
+            'formatter': 'verbose',
+        },
+        'error_file': {  # エラーログ専用
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'error.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {  # 全般ログ
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {  # エラーログ専用
+            'handlers': ['error_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+    },
+}

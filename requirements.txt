@@ -4,10 +4,16 @@ asgiref==3.8.1
 certifi==2024.7.4
 cffi==1.17.0
 charset-normalizer==3.3.2
+dj-database-url==2.3.0
 Django==5.1
+django_csp==3.8
 idna==3.7
+psycopg2-binary==2.9.10
 pycparser==2.22
+python-decouple==3.8
 python-dotenv==1.0.1
 requests==2.32.3
 sqlparse==0.5.1
+typing_extensions==4.12.2
 urllib3==2.2.2
+whitenoise==6.8.2

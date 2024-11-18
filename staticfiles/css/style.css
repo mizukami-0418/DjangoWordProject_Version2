@@ -1,0 +1,197 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E7E7FF;
+    color: #515151;
+    max-width: 1000px;
+    width: 100%;
+    margin: auto;
+    font-family: "Kosugi Maru", sans-serif;
+    font-style: normal;
+    padding-top: 80px;
+}
+
+h3, h4, h5 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+p {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+table {
+    border-radius: 10px;
+}
+
+td, th {
+    text-align: center;
+}
+
+form {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+ul {
+    font-size: 20px;
+    padding: 0;
+    width: fit-content; /* コンテンツ幅に調整 */
+    margin: 24px auto; /* 中央揃え */
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffb6c1; /* 優しいピンク */
+    z-index: 1000; /* 他の要素よりも前面に表示 */
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%); /* 画面の中央に配置 */
+    width: inherit; /* 親の幅に合わせる */
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 0;
+    font-weight: bold;
+    text-shadow: 2px 2px #ff69b4; /* タイトルにシャドウを追加 */
+}
+
+.header .icon {
+    font-size: 3rem;
+    margin-right: 15px;
+    color: #fff;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    color: #3B3BFF;
+    font-weight: 900;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.description {
+    font-size: 16px;
+    width: fit-content; /* コンテンツ幅に調整 */
+    margin: 24px auto; /* 3中央揃え */
+    border: 2px solid #666666; /* 四角の枠線を追加 */
+    padding: 24px; /* 枠線とテキストの間に余白を作成 */
+    border-radius: 24px; /* 角を少し丸くしたい場合 */
+    max-width: 480px;
+    background-color: white;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: #ffffff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.custom-button {
+    display: inline-block;
+    width: 240px;
+    max-width: 320px;
+    min-width: 120px;
+    padding: 12px 24px;
+    background-color: white;
+    color: #515151;
+    text-align: center;
+    border-radius: 24px;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.3s;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
+}
+.custom-button:hover {
+    background-color: #B3B3FF;
+    transform: scale(1.05); /* 少し大きく */
+}
+
+.back-button {
+    width: 56px;
+    height: 32px;
+    background-color: #515151;;
+    color: white;
+    text-align: center;
+    border-radius: 16px;
+    border: none;
+    transition: all 0.3s;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
+}
+
+.back-button:hover {
+    background-color: #B3B3FF;
+    transform: scale(1.05); /* 少し大きく */
+}
+
+.small-button {
+    width: 48px;
+    background-color: white;
+    color: #515151;
+    text-align: center;
+    border-radius: 16px;
+    border-color: #515151;
+}
+
+.small-button:hover {
+    background-color: #B3B3FF;
+}
+
+#music-button {
+    /* font-size: 1.5em; */
+    font-size: 16px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 16px; /* 角を丸くする */
+    background-color: #ffccf9; /* パステルピンク */
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
+    display: inline-flex;
+    align-items: center;
+}
+
+#music-button:hover {
+    background-color: #ff99e6; /* 明るいピンクに変化 */
+    transform: scale(1.05); /* 少し大きく */
+}
+
+#music-icon {
+    margin-right: 10px;
+    animation: bounce 1s infinite; /* アイコンを動かす */
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px); /* 少し浮かび上がる動き */
+    }
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+}
+
+.btn:hover {
+    background-color: #B3B3FF;
+}
