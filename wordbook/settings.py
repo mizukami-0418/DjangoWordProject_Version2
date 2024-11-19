@@ -15,6 +15,8 @@ from pathlib import Path
 from decouple import config
 from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+from logging.handlers import RotatingFileHandler
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -223,10 +225,29 @@ CSRF_COOKIE_SECURE = True
 # ブラウザが不正なファイルの種類での解釈を防ぐ
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# プロジェクトルートを基準にしたログディレクトリ
-LOG_DIR = os.path.join(BASE_DIR, 'logs')
+
+# Content Security Policyの設定
+
+CSP_DEFAULT_SRC = ("'self'",) # 自分のドメインのみ許可
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "https://cdn.jsdelivr.net"  # Bootstrap JavaScript
+)
+CSP_STYLE_SRC = (
+    "'self'",
+    "https://cdn.jsdelivr.net",  # Bootstrap CSS
+    "https://fonts.googleapis.com",  # Google Fonts CSS
+)
+CSP_FONT_SRC = (
+    "'self'",
+    "https://fonts.gstatic.com",  # Google Fontsのフォント用
+)
+
 
 # ロギングの設定
+
+# プロジェクトルートを基準にしたログディレクトリ
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
 LOGGING = {
     'version': 1,
@@ -242,11 +263,13 @@ LOGGING = {
         },
     },
     'handlers': {
-        'file': {  # 全般ログ
+        'rotating_file': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'django.log'),
             'formatter': 'verbose',
+            'maxBytes': 1024 * 1024 * 5,  # 5MB
+            'backupCount': 5,  # バックアップとして保存するファイル数
         },
         'error_file': {  # エラーログ専用
             'level': 'ERROR',
@@ -257,7 +280,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {  # 全般ログ
-            'handlers': ['file'],
+            'handlers': ['rotating_file'],
             'level': 'INFO',
             'propagate': True,
         },
