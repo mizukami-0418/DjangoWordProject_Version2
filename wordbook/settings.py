@@ -13,7 +13,6 @@ import dj_database_url
 import os
 from pathlib import Path
 from decouple import config
-from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
 from logging.handlers import RotatingFileHandler
 
@@ -21,7 +20,6 @@ from logging.handlers import RotatingFileHandler
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -182,18 +180,15 @@ MESSAGE_TAGS = {
 
 # EMIL設定
 # 開発環境用のメール設定
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # 実運用時には以下のようにSMTPメールサーバーを設定します
-'''
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.example.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@example.com'
-EMAIL_HOST_PASSWORD = 'your-email-password'
-'''
-
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # セキュリティ設定
 
