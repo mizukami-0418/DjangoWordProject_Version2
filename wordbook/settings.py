@@ -243,6 +243,10 @@ CSP_FONT_SRC = (
 
 # プロジェクトルートを基準にしたログディレクトリ
 LOG_DIR = os.path.join(BASE_DIR, 'logs')
+# ログディレクトリが存在しない場合は作成
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
 
 LOGGING = {
     'version': 1,
