@@ -92,14 +92,14 @@ WSGI_APPLICATION = 'wordbook.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # ローカル開発用のデータベース設定（SQLiteなど）
-'''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-'''
+
 
 # 本番環境用のデータベース設定
 DATABASE_URL = config('DATABASE_URL')
