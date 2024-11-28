@@ -1,1 +1,1 @@
-web: gunicorn DjangoWordbookProject.wsgi --log-file -
+web: gunicorn wordbook.wsgi
