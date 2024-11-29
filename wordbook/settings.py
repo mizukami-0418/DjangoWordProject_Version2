@@ -13,13 +13,13 @@ import dj_database_url
 import os
 from pathlib import Path
 from decouple import config
-from dotenv import load_dotenv
 from django.contrib.messages import constants as messages
+from logging.handlers import RotatingFileHandler
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv()
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'wordbook.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 # ローカル開発用のデータベース設定（SQLiteなど）
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -99,8 +100,8 @@ DATABASES = {
     }
 }
 
+
 # 本番環境用のデータベース設定
-'''
 DATABASE_URL = config('DATABASE_URL')
 if DATABASE_URL:
     DATABASES['default'] = dj_database_url.config(
@@ -108,7 +109,6 @@ if DATABASE_URL:
         conn_max_age=600,
         ssl_require=True
     )
-'''
 
 
 # Password validation
@@ -180,18 +180,15 @@ MESSAGE_TAGS = {
 
 # EMIL設定
 # 開発環境用のメール設定
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # 実運用時には以下のようにSMTPメールサーバーを設定します
-'''
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.example.com'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@example.com'
-EMAIL_HOST_PASSWORD = 'your-email-password'
-'''
-
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 # セキュリティ設定
 
@@ -223,10 +220,33 @@ CSRF_COOKIE_SECURE = True
 # ブラウザが不正なファイルの種類での解釈を防ぐ
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-# プロジェクトルートを基準にしたログディレクトリ
-LOG_DIR = os.path.join(BASE_DIR, 'logs')
+
+# Content Security Policyの設定
+
+CSP_DEFAULT_SRC = ("'self'",) # 自分のドメインのみ許可
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "https://cdn.jsdelivr.net"  # Bootstrap JavaScript
+)
+CSP_STYLE_SRC = (
+    "'self'",
+    "https://cdn.jsdelivr.net",  # Bootstrap CSS
+    "https://fonts.googleapis.com",  # Google Fonts CSS
+)
+CSP_FONT_SRC = (
+    "'self'",
+    "https://fonts.gstatic.com",  # Google Fontsのフォント用
+)
+
 
 # ロギングの設定
+
+# プロジェクトルートを基準にしたログディレクトリ
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+# ログディレクトリが存在しない場合は作成
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
 
 LOGGING = {
     'version': 1,
@@ -242,11 +262,13 @@ LOGGING = {
         },
     },
     'handlers': {
-        'file': {  # 全般ログ
+        'rotating_file': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'django.log'),
             'formatter': 'verbose',
+            'maxBytes': 1024 * 1024 * 5,  # 5MB
+            'backupCount': 5,  # バックアップとして保存するファイル数
         },
         'error_file': {  # エラーログ専用
             'level': 'ERROR',
@@ -257,7 +279,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {  # 全般ログ
-            'handlers': ['file'],
+            'handlers': ['rotating_file'],
             'level': 'INFO',
             'propagate': True,
         },

@@ -15,4 +15,5 @@ urlpatterns = [
     path('contact/', include('contact.urls')),
     path('dictionary/', include('dictionary.urls')),
     path('flashcard/', include('flashcard.urls')),
+    path('test-error/', views.test_error, name='test_error'), # ERRORログ用
 ]
