@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
-from .forms import UserRegistrationForm, UserLoginForm, UserEditForm, CustomPasswordChangeForm, CustomSetPasswordForm
+from .forms import UserRegistrationForm, UserLoginForm, UserEditForm, CustomPasswordChangeForm, CustomSetPasswordForm, CustomPasswordResetForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import PasswordChangeView, PasswordResetConfirmView
+from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.urls import reverse_lazy
 from dictionary.models import Word
 from flashcard.models import UserWordStatus
+from accounts.models import CustomUser
 
-
+# ユーザー新規登録
 def register(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -25,6 +26,7 @@ def register(request):
         form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
+# ログイン関数
 def user_login(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
@@ -73,7 +75,7 @@ def user_detail(request):
     # ユーザーの回答実績を取得
     words_status = UserWordStatus.objects.filter(user=request.user)
     
-    # 各難易度のモードごとの回答数と正解すうを取得
+    # 各難易度のモードごとの回答数と正解数を取得
     results = {
         level: {
             mode: {
@@ -109,6 +111,7 @@ def user_edit(request):
         
     return render(request, 'accounts/user_edit.html', {'form': form})
 
+# ユーザー情報でパスワードを変更するクラス
 class CustomPasswordChangeView(PasswordChangeView):
     form_class = CustomPasswordChangeForm
     template_name = 'accounts/change_password.html'
@@ -120,7 +123,31 @@ class CustomPasswordChangeView(PasswordChangeView):
             for error in errors:
                 messages.error(self.request, f"{form.fields[field].label}: {error}")
         return super().form_invalid(form)
+
+# ユーザー情報でパスワード変更後にレンダリング
+@login_required
+def password_change_done(request):
+    messages.success(request, 'パスワードが正常に変更されました')
+    return render(request, 'accounts/password_change_done.html')
+
+
+# パスワードを忘れた時のパスワードリセットクラス
+class CustomPasswordResetView(PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = 'registration/password_reset_form.html'
+    success_url = reverse_lazy('password_reset_done')
     
+    # メールアドレスがユーザー登録されているか確認する関数
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('email')
+        
+        if email:
+            if not CustomUser.objects.filter(email=email).exists():
+                messages.error(self.request, "指定されたメールアドレスは登録されていません。")
+                return redirect('password_reset')  # ログイン画面にリダイレクト
+        return super().post(request, *args, **kwargs)
+
+# パスワードリセット後のリンク先でパスワードを登録するクラス
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):
     form_class = CustomSetPasswordForm
     template_name = 'registration/password_reset_confirm.html'
@@ -133,8 +160,3 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
                 messages.error(self.request, f"{form.fields[field].label}: {error}")
         return super().form_invalid(form)
 
-
-@login_required
-def password_change_done(request):
-    messages.success(request, 'パスワードが正常に変更されました')
-    return render(request, 'accounts/password_change_done.html')
