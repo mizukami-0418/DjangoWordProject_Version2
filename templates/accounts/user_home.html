@@ -1,9 +1,7 @@
 <!-- templates/accounts/user_home.html -->
 
 {% extends "base.html" %}
-
 {% block title %}USER HOME{% endblock %}
-
 {% block content %}
 <h1 class="title">ことばポケット</h1>
 {% include "templates/includes/message.html" %}
@@ -12,24 +10,24 @@
 <div class="description">
     <div class="mb-3 text-center">
         <strong>『DICTIONARY』</strong>モードは辞書機能です。<br>
-        調べたい単語を入力し、結果を出力します。<br>
-        英訳、和訳に対応しています。<br>
+        調べたい単語を入れてね！<br>
+        英訳、和訳どちらもOK<br>
     </div>
     <div class="mb-3 text-center">
-        英訳：「りんご」を入力 → 「apple」を出力<br>
-        和訳：「apple」を入力 → 「りんご,林檎」を出力
+        英訳：「りんご」 → 「apple」<br>
+        和訳：「apple」 → 「りんご,林檎」
     </div>
     <hr>
     <div class="mb-3 text-center">
         <strong>『FLASHCARD』</strong>モードは単語帳機能です。<br>
         4種類のレベルから選べるよ。<br>
         英訳と和訳の2種類から選んでね。<br>
-        その他にもいろいろなモードがあるので、<br>ぜひ遊んでみてください。
+        いろいろなモードがあるので、<br>ぜひ遊んでみてね。
     </div>
     <hr>
     <div class="text-center">
-        <strong>ユーザー情報</strong>はアカウントの情報を確認できるよ。<br>
-        ユーザー名やメールアドレス、学習履歴を確認したいときはここをクリックしてね。
+        <strong>『ユーザー情報』</strong>はアカウント情報です。<br>
+        ユーザー名・メールアドレス、<br>学習履歴はここで確認！
     </div>
 </div>
 <p><a href="{% url 'search' %}" class="custom-button">DICTIONARY</a></p>

@@ -22,6 +22,7 @@ def register(request):
             return redirect('user_home')
         else:
             messages.error(request, '登録失敗')
+            return redirect('register')
     else:
         form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
@@ -40,8 +41,10 @@ def user_login(request):
                 return redirect('user_home')
             else:
                 messages.error(request, 'ユーザーが存在しません')
+                return redirect('login')
         else:
             messages.error(request, '入力に誤りがあります')
+            return redirect('login')
     else:
         form = UserLoginForm()
     return render(request, 'accounts/login.html', {'form': form})
@@ -106,6 +109,7 @@ def user_edit(request):
             return redirect('detail')
         else:
             messages.error(request, '更新に失敗しました。再入力お願いします')
+            return redirect('edit')
     else:
         form = UserEditForm(instance=request.user)
         

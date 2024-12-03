@@ -6,13 +6,6 @@
 <h2 class="title">復習モード</h2>
 <h4>{% if review_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h4>
 <h4>クイズ画面</h4>
-{% comment %} 実装確認のために出力 {% endcomment %}
-<ul>
-    <li>{{ current_question }}</li>
-    <li>{{ current_question.japanese }}</li>
-    <li>{{ current_question.part_of_speech }}</li>
-    <li>{{ current_question.phrase }}</li>
-</ul>
 <h4>全{{ review_progress.total_questions }}問</h4>
 <h5>第{{ review_progress.current_question_index | add:1 }}問</h5>
 

@@ -1,8 +1,7 @@
 from django.contrib import admin
 from .models import UserProgress, UserWordStatus, UserReviewProgress
 
-# Register your models here.
-
+# 進捗情報管理
 class UserProgressAdmin(admin.ModelAdmin):
     list_display = ('get_username', 'get_level', 'get_mode', 'get_score', 'is_completed', 'is_paused')
     list_filter = ('level', 'mode', 'is_completed', 'is_paused',)
@@ -26,7 +25,7 @@ class UserProgressAdmin(admin.ModelAdmin):
     get_score.short_description = 'スコア'
     
 
-
+# 単語帳回答実績確認
 class UserWordStatusAdmin(admin.ModelAdmin):
     list_display = ('get_username', 'get_word_english', 'get_word_japanese', 'get_mode', 'is_correct')
     list_filter = ('mode', 'is_correct')
@@ -49,6 +48,7 @@ class UserWordStatusAdmin(admin.ModelAdmin):
         return obj.mode
     get_mode.short_description = '選択モード'
 
+# 復讐モードの進捗管理
 class UserReviewProgressAdmin(admin.ModelAdmin):
     list_display = ('get_username', 'get_mode', 'get_score', 'get_total_questions', 'is_completed', 'is_paused')
     list_filter = ('mode', 'is_completed', 'is_paused',)
