@@ -118,7 +118,7 @@ def quiz(request):
     
     # テストモードの場合、ランダムで5問出題する
     if test: 
-        total_questions = 5
+        total_questions = 100
         questions = random.sample(list(words.values_list('id', flat=True)), total_questions)
         messages.success(request, 'テストモードで開始します')
     elif replay:
@@ -452,8 +452,8 @@ def result(request, progress_id):
         'correct_answer_rate':correct_answer_rate,
         'user_progress': user_progress,
     }
-    # テストモードの場合、一旦5問で作成
-    if user_progress.total_questions == 5:
+    # テストモードの場合
+    if user_progress.total_questions == 100:
         return render(request, 'flashcard/test_result.html', context)
     
     return render(request, 'flashcard/result.html', context)

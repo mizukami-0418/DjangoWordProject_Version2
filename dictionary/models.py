@@ -1,6 +1,6 @@
 from django.db import models
 
-
+# 品詞モデル
 class PartOfSpeech(models.Model):
     name = models.CharField(max_length=50, verbose_name='品詞') # 名詞、動詞など
     
@@ -15,7 +15,7 @@ class PartOfSpeech(models.Model):
     def __str__(self):
         return self.name
 
-
+# 難易度モデル
 class Level(models.Model):
     name = models.CharField(max_length=50, verbose_name='難易度') # 初級、中級など
     description = models.CharField(max_length=255,null=True, verbose_name='説明') # 難易度の説明
@@ -31,7 +31,7 @@ class Level(models.Model):
     def __str__(self):
         return self.name
 
-
+# 単語モデル
 class Word(models.Model):
     english = models.CharField(max_length=255, verbose_name='英語', db_index=True, unique=True) # 英語
     japanese = models.CharField(max_length=255, verbose_name='日本語', db_index=True) # 日本語
@@ -45,25 +45,3 @@ class Word(models.Model):
     
     def __str__(self):
         return self.english
-    
-    '''
-    登録予定の品詞と難易度
-    PART_OF_SPEECH_SELECT = [
-        ('名詞', '名詞'),
-        ('形容詞', '形容詞'),
-        ('代名詞', '代名詞'),
-        ('副詞', '副詞'),
-        ('動詞', '動詞'),
-        ('助動詞', '助動詞'),
-        ('前置詞', '前置詞'),
-        ('接続詞', '接続詞'),
-        ('間投詞', '間投詞'),
-    ]
-    
-    LEVEL_SELECT = [
-        ('Beginner', '初級(中学)'),
-        ('Intermediate', '中級(高校)'),
-        ('Advanced', '上級(大学,社会人)'),
-        ('Expert', '特級(それ以上)'),
-    ]
-    '''
