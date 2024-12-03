@@ -3,7 +3,7 @@
 {% extends "base.html" %}
 {% block title %}新規登録{% endblock title %}
 {% block content %}
-<button class="back-button" type="button" onClick="history.back()">戻る</button>
+{% include "templates/includes/back_button.html" %}
 <h1 class="title">Let's Make an Account!</h1>
 <h4>ことばポケットへようこそ！！！<br>こちらより新規登録お願いします</h4>
 <form method="POST" class="form">

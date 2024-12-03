@@ -4,7 +4,7 @@
 {% block title %}LOGIN{% endblock %}
 
 {% block content %}
-<button class="back-button" type="button" onClick="history.back()">戻る</button>
+{% include "templates/includes/back_button.html" %}
 <h1 class="title">Let's Get Started!</h1>
 <h4>ことばポケットへようこそ<br>こちらよりログインをお願いします</h4>
 {% include "templates/includes/message.html" %}
