@@ -36,6 +36,11 @@ form {
     margin: 0 auto;
 }
 
+.form-control::placeholder {
+    color: #ccc; /* 色を薄いグレーに設定 */
+    opacity: 0.7; /* 透明度を調整 */
+}
+
 ul {
     font-size: 20px;
     padding: 0;
@@ -124,6 +129,7 @@ ul {
 }
 
 .back-button {
+    position: relative;
     width: 56px;
     height: 32px;
     background-color: #515151;;
@@ -138,6 +144,35 @@ ul {
 .back-button:hover {
     background-color: #B3B3FF;
     transform: scale(1.05); /* 少し大きく */
+}
+
+/* ツールチップのスタイル */
+.back-button:hover::after {
+    content: "前のページに戻る"; /* ツールチップの内容 */
+    position: absolute;
+    top: -40px; /* ボタンの上に表示 */
+    left: 120%;
+    transform: translateX(-50%);
+    background-color: #ffb6c1; /* 柔らかいピンク */
+    color: #515151;
+    padding: 8px 12px;
+    border-radius: 15px; /* 丸みを強調 */
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 少し影を追加 */
+    z-index: 10; /* 前面に表示 */
+    opacity: 1; /* 表示状態 */
+    visibility: visible; /* 表示状態 */
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* 初期状態では非表示 */
+.back-button::after {
+    content: ''; /* ツールチップなし */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(10px); /* 初期位置を少し下に */
 }
 
 .small-button {
@@ -159,8 +194,8 @@ ul {
     padding: 8px 16px;
     border: none;
     border-radius: 16px; /* 角を丸くする */
-    background-color: #ffccf9; /* パステルピンク */
-    color: #333;
+    background-color: #ffb6c1; /* パステルピンク */
+    color: #515151;
     cursor: pointer;
     transition: all 0.3s;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
@@ -169,7 +204,7 @@ ul {
 }
 
 #music-button:hover {
-    background-color: #ff99e6; /* 明るいピンクに変化 */
+    background-color: #ffccf9; /* 明るいピンクに変化 */
     transform: scale(1.05); /* 少し大きく */
 }
 

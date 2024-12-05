@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # デバッグ設定の読み込み（存在しない場合はデフォルトでFalse）
-DEBUG = False
+DEBUG = True
 
 # 接続を許可するホストをローカルとherokuのアドレスに固定
 ALLOWED_HOSTS = [
@@ -67,7 +67,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
 
 ROOT_URLCONF = 'wordbook.urls'
 
