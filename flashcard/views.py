@@ -180,6 +180,45 @@ def get_current_question(request, progress_id):
     
     return user_progress, current_question
 
+# セーブデータの詳細を表示する関数
+def paused_data_detail(request, progress_id):
+    # UserProgressを取得
+    user_progress_data = UserProgress.objects.filter(user=request.user, id=progress_id, is_completed=False).all()
+    for user_progress in user_progress_data:
+    
+    # 正答率を計算
+        if user_progress.current_question_index > 0:
+            correct_answer_rate = int(user_progress.score / user_progress.current_question_index * 100)
+        else:
+            correct_answer_rate = 0
+
+    # テンプレートにデータを渡す
+    context = {
+        'user_progress_data': user_progress_data,
+        'correct_answer_rate': correct_answer_rate,
+    }
+    return render(request, 'flashcard/paused_data_detail.html', context)
+
+# 復習モードセーブデータの詳細を表示する関数
+def review_paused_data_detail(request, progress_id):
+    # UserProgressを取得
+    review_progress_data = UserReviewProgress.objects.filter(user=request.user, id=progress_id, is_completed=False).all()
+    for review_progress in review_progress_data:
+    
+    # 正答率を計算
+        if review_progress.current_question_index > 0:
+            correct_answer_rate = int(review_progress.score / review_progress.current_question_index * 100)
+        else:
+            correct_answer_rate = 0
+
+    # テンプレートにデータを渡す
+    context = {
+        'review_progress_data': review_progress_data,
+        'correct_answer_rate': correct_answer_rate,
+    }
+    return render(request, 'flashcard/review_paused_data_detail.html', context)
+
+
 # 中断データで再開
 @login_required
 def quiz_restart(request, progress_id):

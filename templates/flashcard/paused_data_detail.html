@@ -1,12 +1,13 @@
-<!-- templates/flashcard/show_paused_data.html -->
+<!-- templates/flashcard/paused_data_detail.html -->
 
 {% extends "base.html" %}
-{% block title %}SELECT CONTINUE{% endblock %}
+{% block title %}PAUSED DATA DETAIL{% endblock %}
 {% block content %}
 {% include "templates/includes/back_button.html" %}
-<h2 class="title">セーブデータ</h2>
+<h2 class="title">セーブデータ詳細</h2>
 {% include "templates/includes/message.html" %}
 {% if user_progress_data %}
+
 <table class="table table-sm table-striped">
     <thead>
         <tr>
@@ -14,6 +15,9 @@
             <th scope="col">モード</th>
             <th scope="col">出題数</th>
             <th scope="col">回答数</th>
+            <th scope="col">正解数</th>
+            <th scope="col">正答率</th>
+            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
     </thead>
@@ -24,10 +28,18 @@
             <td>{% if user_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</td>
             <td>{{ user_progress.total_questions }}</td>
             <td>{{ user_progress.current_question_index }}</td>
+            <td>{{ user_progress.score }}</td>
+            <td>{{ correct_answer_rate }}%</td>
             <td>
-                <form method="POST" action="{% url 'paused_data_detail' user_progress.id %}">
+                <form method="POST" action="{% url 'quiz_restart' user_progress.id %}">
                     {% csrf_token %}
-                    <button class="small-button" type="submit">詳細</button>
+                    <button class="small-button" type="submit">再開</button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="{% url 'reset_user_progress' user_progress.id %}">
+                    {% csrf_token %}
+                    <button class="small-button" type="submit">削除</button>
                 </form>
             </td>
         </tr>

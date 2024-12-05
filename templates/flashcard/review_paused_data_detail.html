@@ -1,31 +1,45 @@
-<!-- templates/flashcard/show_review_paused_data.html -->
+<!-- templates/flashcard/review_paused_data_detail.html -->
 
 {% extends "base.html" %}
-{% block title %}REVIEW CONTINUE{% endblock %}
+{% block title %}REVIEW PAUSED DATA DETAIL{% endblock %}
 {% block content %}
 {% include "templates/includes/back_button.html" %}
-<h2 class="title">復習モード<br>セーブデータ</h2>
+<h2 class="title">復習セーブデータ詳細</h2>
 {% include "templates/includes/message.html" %}
 {% if review_progress_data %}
+
 <table class="table table-sm table-striped">
     <thead>
         <tr>
+            <th scope="col">レベル</th>
             <th scope="col">モード</th>
             <th scope="col">出題数</th>
             <th scope="col">回答数</th>
+            <th scope="col">正解数</th>
+            <th scope="col">正答率</th>
+            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         {% for review_progress in review_progress_data %}
         <tr>
+            <td>{{ review_progress.level.name }}</td>
             <td>{% if review_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</td>
             <td>{{ review_progress.total_questions }}</td>
             <td>{{ review_progress.current_question_index }}</td>
+            <td>{{ review_progress.score }}</td>
+            <td>{{ correct_answer_rate }}%</td>
             <td>
-                <form method="POST" action="{% url 'review_paused_data_detail' review_progress.id %}">
+                <form method="POST" action="{% url 'review_quiz' review_progress.id %}">
                     {% csrf_token %}
-                    <button class="small-button" type="submit">詳細</button>
+                    <button class="small-button" type="submit">再開</button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" action="{% url 'reset_review_progress' review_progress.id %}">
+                    {% csrf_token %}
+                    <button class="small-button" type="submit">削除</button>
                 </form>
             </td>
         </tr>
@@ -33,7 +47,7 @@
     </tbody>
 </table>
 {% else %}
-    <p>中断したクイズはありません。</p>
+    <p>中断データはありません。</p>
 {% endif %}
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
