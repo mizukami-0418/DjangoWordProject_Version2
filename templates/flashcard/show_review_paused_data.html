@@ -7,31 +7,33 @@
 <h2 class="title">復習モード<br>セーブデータ</h2>
 {% include "templates/includes/message.html" %}
 {% if review_progress_data %}
-<table class="table table-sm table-striped">
-    <thead>
-        <tr>
-            <th scope="col">モード</th>
-            <th scope="col">出題数</th>
-            <th scope="col">回答数</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for review_progress in review_progress_data %}
-        <tr>
-            <td>{% if review_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</td>
-            <td>{{ review_progress.total_questions }}</td>
-            <td>{{ review_progress.current_question_index }}</td>
-            <td>
-                <form method="POST" action="{% url 'review_paused_data_detail' review_progress.id %}">
-                    {% csrf_token %}
-                    <button class="small-button" type="submit">詳細</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% for review_progress in review_progress_data %}
+<form method="POST" action="{% url 'review_paused_data_detail' review_progress.id %}" class="progress-box">
+    {% csrf_token %}
+    <button type="submit" class="progress-box-button">
+        <div class="progress-box-header">
+            モード：{% if review_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}
+        </div>
+        <div class="progress-bar-wrapper">
+            <div class="progress-bar-container">
+                <div class="progress-bar" data-current="{{ review_progress.current_question_index }}" data-total="{{ review_progress.total_questions }}"></div>
+            </div>
+            <span class="progress-label">
+                達成率：{{ review_progress.current_question_index }} / {{ review_progress.total_questions }}
+            </span>
+        </div>
+    </button>
+</form>
+{% endfor %}
+<script>
+    // すべての進捗バーを取得して処理
+    document.querySelectorAll('.progress-bar').forEach(bar => {
+        const current = parseInt(bar.getAttribute('data-current'));
+        const total = parseInt(bar.getAttribute('data-total'));
+        const percentage = (current / total) * 100;
+        bar.style.width = `${percentage}%`;
+    });
+</script>
 {% else %}
     <p>中断したクイズはありません。</p>
 {% endif %}
