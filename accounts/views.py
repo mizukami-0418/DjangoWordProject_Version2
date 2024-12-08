@@ -5,7 +5,7 @@ from .forms import UserRegistrationForm, UserLoginForm, UserEditForm, CustomPass
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.urls import reverse_lazy
-from dictionary.models import Word
+from dictionary.models import Word, Level
 from flashcard.models import UserWordStatus
 from accounts.models import CustomUser
 
@@ -66,36 +66,49 @@ def user_home(request):
 @login_required
 def user_detail(request):
     # レベルとモードのリストを定義
-    levels = ['1', '2', '3', '4']
+    levels = Level.objects.all().values('id', 'name')
     modes = ['en', 'ja']
-    
-    # 各難易度の問題総数を取得
-    total_counts = {
-        level: Word.objects.filter(level=level).count()
-        for level in levels
-    }
     
     # ユーザーの回答実績を取得
     words_status = UserWordStatus.objects.filter(user=request.user)
     
-    # 各難易度のモードごとの回答数と正解数を取得
-    results = {
-        level: {
-            mode: {
-                'count': words_status.filter(word__level=level, mode=mode).count(),
-                'correct': words_status.filter(word__level=level, mode=mode, is_correct=True).count()
-            }
-            for mode in modes
-        }
-        for level in levels
+    # モード名の翻訳マッピング
+    MODE_TRANSLATIONS = {
+        'en': '英訳',
+        'ja': '和訳',
     }
     
-    # コンテキストを準備
+    level_data = []
+    for level in levels:
+        level_id = level['id']
+        level_name = level['name']
+        
+        # 各難易度の問題総数を取得
+        total_count = Word.objects.filter(level=level_id).count()
+        
+        # 各モードごとの回答数と正解数
+        mode_data = []
+        for mode in modes:
+            count = words_status.filter(word__level=level_id, mode=mode).count()
+            correct = words_status.filter(word__level=level_id, mode=mode, is_correct=True).count()
+            mode_data.append({
+                'mode': mode,
+                'mode_display': MODE_TRANSLATIONS.get(mode, mode),  # 翻訳を適用
+                'count': count,
+                'correct': correct,
+            })
+        
+        # level_dataにデータを挿入する
+        level_data.append({
+            'id': level_id,
+            'name': level_name,
+            'total_count': total_count,
+            'modes': mode_data,
+        })
+    
     context = {
-        'total_counts': total_counts,
-        'results': results,
+        'levels': level_data,
     }
-    
     return render(request, 'accounts/user_detail.html', context)
 
 # ユーザー編集

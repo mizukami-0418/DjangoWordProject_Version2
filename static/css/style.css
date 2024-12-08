@@ -82,8 +82,7 @@ ul {
     margin-top: 16px;
     margin-bottom: 16px;
     color: #3B3BFF;
-    font-weight: 900;
-    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
 }
 
 .description {
@@ -232,6 +231,18 @@ ul {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.progress-box-detail {
+    background-color: white;
+    border: 2px solid #ffccd5; /* 少し濃いピンクの枠線 */
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    margin: 20px auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* ふんわりとした影 */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
 .progress-box:hover {
     transform: scale(1.02); /* ホバー時に少し拡大 */
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* ホバー時に影を強調 */
@@ -282,5 +293,34 @@ ul {
     font-size: 16px;
     color: #ff66b2;
     font-weight: bold;
+}
+
+/* 全体のテーブルスタイル */
+.custom-pink-table {
+    border: 1px solid #ffccd5;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* ヘッダーのスタイル */
+.custom-pink-table thead th {
+    background-color: #ffccd5; /* ピンクの背景色 */
+    color: #721c24;           /* ダークピンクの文字色 */
+    font-weight: bold;
+    text-align: center;
+    border: none;
+}
+
+/* セルの境界線と文字のスタイル */
+.custom-pink-table tbody td {
+    border-top: 1px solid #f8d7da; /* ピンクの境界線 */
+    text-align: center;
+    color: #515151;
+    padding: 8px;
+}
+
+/* ホバースタイル */
+.custom-pink-table tbody tr:hover {
+    background-color: #ffd5dc; /* ホバー時のピンク色 */
 }
 

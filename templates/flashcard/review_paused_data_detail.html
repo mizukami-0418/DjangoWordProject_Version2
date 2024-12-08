@@ -7,45 +7,58 @@
 <h2 class="title">復習セーブデータ詳細</h2>
 {% include "templates/includes/message.html" %}
 {% if review_progress_data %}
-
-<table class="table table-sm table-striped">
+{% for review_progress in review_progress_data %}
+<h4>モード：{% if review_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</h4>
+<table class="table custom-pink-table">
     <thead>
         <tr>
-            <th scope="col">レベル</th>
-            <th scope="col">モード</th>
             <th scope="col">出題数</th>
             <th scope="col">回答数</th>
             <th scope="col">正解数</th>
             <th scope="col">正答率</th>
-            <th scope="col"></th>
-            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        {% for review_progress in review_progress_data %}
         <tr>
-            <td>{{ review_progress.level.name }}</td>
-            <td>{% if review_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</td>
             <td>{{ review_progress.total_questions }}</td>
             <td>{{ review_progress.current_question_index }}</td>
             <td>{{ review_progress.score }}</td>
             <td>{{ correct_answer_rate }}%</td>
-            <td>
-                <form method="POST" action="{% url 'review_quiz' review_progress.id %}">
-                    {% csrf_token %}
-                    <button class="small-button" type="submit">再開</button>
-                </form>
-            </td>
-            <td>
-                <form method="POST" action="{% url 'reset_review_progress' review_progress.id %}">
-                    {% csrf_token %}
-                    <button class="small-button" type="submit">削除</button>
-                </form>
-            </td>
         </tr>
-        {% endfor %}
     </tbody>
 </table>
+<div class="progress-box-detail">
+    <div class="progress-box-header">
+        達成率：{{ review_progress.current_question_index }} / {{ review_progress.total_questions }}
+    </div>
+    <div class="progress-bar-wrapper">
+        <div class="progress-bar-container">
+            <div class="progress-bar" data-current="{{ review_progress.current_question_index }}" data-total="{{ review_progress.total_questions }}"></div>
+        </div>
+    </div>
+</div>
+<div class="button">
+    <form method="POST" action="{% url 'review_quiz' review_progress.id %}">
+        {% csrf_token %}
+        <button class="custom-button" type="submit">RESTART</button>
+    </form>
+</div>
+<div class="button my-3">
+    <form method="POST" action="{% url 'reset_review_progress' review_progress.id %}">
+        {% csrf_token %}
+        <button class="custom-button" type="submit">DELETE</button>
+    </form>
+</div>
+{% endfor %}
+<script>
+    // すべての進捗バーを取得して処理
+    document.querySelectorAll('.progress-bar').forEach(bar => {
+        const current = parseInt(bar.getAttribute('data-current'));
+        const total = parseInt(bar.getAttribute('data-total'));
+        const percentage = (current / total) * 100;
+        bar.style.width = `${percentage}%`;
+    });
+</script>
 {% else %}
     <p>中断データはありません。</p>
 {% endif %}

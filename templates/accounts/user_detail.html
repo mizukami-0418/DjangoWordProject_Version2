@@ -14,8 +14,9 @@
     <h5>ユーザー名：{{ request.user.username }}</h5>
     <h5>メールアドレス：{{ request.user.email }}</h5>
 </div>
-<h3>Beginnerクラス</h3>
-<table class="table table-sm table-striped">
+{% for level in levels %}
+<h3>{{ level.name }}</h3>
+<table class="table custom-pink-table">
     <thead>
         <tr>
             <th scope="col">モード</th>
@@ -25,96 +26,17 @@
         </tr>
     </thead>
     <tbody>
+        {% for mode in level.modes %}
         <tr>
-            <td>英　訳</td>
-            <td>{{ total_counts.1 }}</td>
-            <td>{{ results.1.en.count }}</td>
-            <td>{{ results.1.en.correct }}</td>
+            <td>{{ mode.mode_display }}</td>
+            <td>{{ level.total_count }}</td>
+            <td>{{ mode.count }}</td>
+            <td>{{ mode.correct }}</td>
         </tr>
-        <tr>
-            <td>和　訳</td>
-            <td>{{ total_counts.1 }}</td>
-            <td>{{ results.1.ja.count }}</td>
-            <td>{{ results.1.ja.correct }}</td>
-        </tr>
+        {% endfor %}
     </tbody>
 </table>
-<h3>Intermediateクラス</h3>
-<table class="table table-sm table-striped">
-    <thead>
-        <tr>
-            <th scope="col">モード</th>
-            <th scope="col">総数</th>
-            <th scope="col">回答数</th>
-            <th scope="col">正解数</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>英　訳</td>
-            <td>{{ total_counts.2 }}</td>
-            <td>{{ results.2.en.count }}</td>
-            <td>{{ results.2.en.correct }}</td>
-        </tr>
-        <tr>
-            <td>和　訳</td>
-            <td>{{ total_counts.2 }}</td>
-            <td>{{ results.2.ja.count }}</td>
-            <td>{{ results.2.ja.correct }}</td>
-        </tr>
-    </tbody>
-</table>
-<h3>Advancedクラス</h3>
-<table class="table table-sm table-striped">
-    <thead>
-        <tr>
-            <th scope="col">モード</th>
-            <th scope="col">総数</th>
-            <th scope="col">回答数</th>
-            <th scope="col">正解数</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>英　訳</td>
-            <td>{{ total_counts.3 }}</td>
-            <td>{{ results.3.en.count }}</td>
-            <td>{{ results.3.en.correct }}</td>
-        </tr>
-        <tr>
-            <td>和　訳</td>
-            <td>{{ total_counts.3 }}</td>
-            <td>{{ results.3.ja.count }}</td>
-            <td>{{ results.3.ja.correct }}</td>
-        </tr>
-    </tbody>
-</table>
-<h3>Expertクラス</h3>
-<table class="table table-sm table-striped">
-    <thead>
-        <tr>
-            <th scope="col">モード</th>
-            <th scope="col">総数</th>
-            <th scope="col">回答数</th>
-            <th scope="col">正解数</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>英　訳</td>
-            <td>{{ total_counts.4 }}</td>
-            <td>{{ results.4.en.count }}</td>
-            <td>{{ results.4.en.correct }}</td>
-        </tr>
-        <tr>
-            <td>和　訳</td>
-            <td>{{ total_counts.4 }}</td>
-            <td>{{ results.4.ja.count }}</td>
-            <td>{{ results.4.ja.correct }}</td>
-        </tr>
-    </tbody>
-</table>
-<p><a href="{% url 'edit' %}">ユーザー情報変更はこちら</a></p>
+{% endfor %}
 <p><a href="{% url 'password_change' %}">パスワード変更はこちら</a></p>
 <p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
 <p><a href="{% url 'logout' %}">ログアウト</a></p>
