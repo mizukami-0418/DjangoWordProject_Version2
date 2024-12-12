@@ -9,7 +9,7 @@ handler404 = custom_404
 handler500 = custom_500
 
 urlpatterns = [
-    path('toamokuadmin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('', views.home , name="home"),
     path('accounts/', include('accounts.urls')),
     path('contact/', include('contact.urls')),

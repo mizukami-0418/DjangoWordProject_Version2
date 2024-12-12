@@ -36,6 +36,11 @@ form {
     margin: 0 auto;
 }
 
+.form-control::placeholder {
+    color: #ccc; /* 色を薄いグレーに設定 */
+    opacity: 0.7; /* 透明度を調整 */
+}
+
 ul {
     font-size: 20px;
     padding: 0;
@@ -73,11 +78,11 @@ ul {
 .title {
     display: flex;
     justify-content: center;
+    text-align: center;
     margin-top: 16px;
     margin-bottom: 16px;
     color: #3B3BFF;
-    font-weight: 900;
-    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
 }
 
 .description {
@@ -89,17 +94,6 @@ ul {
     border-radius: 24px; /* 角を少し丸くしたい場合 */
     max-width: 480px;
     background-color: white;
-}
-
-.btn {
-    display: inline-block;
-    padding: 12px 24px;
-    background-color: #007bff;
-    color: #ffffff;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 8px;
-    font-size: 16px;
 }
 
 .custom-button {
@@ -124,6 +118,7 @@ ul {
 }
 
 .back-button {
+    position: relative;
     width: 56px;
     height: 32px;
     background-color: #515151;;
@@ -138,6 +133,35 @@ ul {
 .back-button:hover {
     background-color: #B3B3FF;
     transform: scale(1.05); /* 少し大きく */
+}
+
+/* ツールチップのスタイル */
+.back-button:hover::after {
+    content: "前のページに戻る"; /* ツールチップの内容 */
+    position: absolute;
+    top: -40px; /* ボタンの上に表示 */
+    left: 120%;
+    transform: translateX(-50%);
+    background-color: #ffb6c1; /* 柔らかいピンク */
+    color: #515151;
+    padding: 8px 12px;
+    border-radius: 15px; /* 丸みを強調 */
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 少し影を追加 */
+    z-index: 10; /* 前面に表示 */
+    opacity: 1; /* 表示状態 */
+    visibility: visible; /* 表示状態 */
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+/* 初期状態では非表示 */
+.back-button::after {
+    content: ''; /* ツールチップなし */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-50%) translateY(10px); /* 初期位置を少し下に */
 }
 
 .small-button {
@@ -159,8 +183,8 @@ ul {
     padding: 8px 16px;
     border: none;
     border-radius: 16px; /* 角を丸くする */
-    background-color: #ffccf9; /* パステルピンク */
-    color: #333;
+    background-color: #ffb6c1; /* パステルピンク */
+    color: #515151;
     cursor: pointer;
     transition: all 0.3s;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 影を追加 */
@@ -169,7 +193,7 @@ ul {
 }
 
 #music-button:hover {
-    background-color: #ff99e6; /* 明るいピンクに変化 */
+    background-color: #ffccf9; /* 明るいピンクに変化 */
     transform: scale(1.05); /* 少し大きく */
 }
 
@@ -192,6 +216,111 @@ ul {
     justify-content: center;
 }
 
-.btn:hover {
-    background-color: #B3B3FF;
+/* セーブデータ表示画面 */
+.progress-box {
+    background-color: white;
+    border: 2px solid #ffccd5; /* 少し濃いピンクの枠線 */
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    max-width: 440px;
+    margin: 20px auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* ふんわりとした影 */
+    text-align: center;
+    cursor: pointer; /* クリック可能カーソル */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.progress-box-detail {
+    background-color: white;
+    border: 2px solid #ffccd5; /* 少し濃いピンクの枠線 */
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    margin: 20px auto;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* ふんわりとした影 */
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.progress-box:hover {
+    transform: scale(1.02); /* ホバー時に少し拡大 */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* ホバー時に影を強調 */
+    background-color: #ffccd5;
+}
+
+  /* ボックスのヘッダー部分 */
+.progress-box-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #515151; /* 目立つピンク */
+    margin-bottom: 15px;
+}
+
+.progress-box-button {
+    all: unset; /* デフォルトのボタンスタイルをリセット */
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+  /* コンポーネント内部 */
+.progress-bar-wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.progress-bar-container {
+    flex: 1;
+    height: 16px;
+    background-color: #ffe4e9;
+    border-radius: 8px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff99cc, #ff66b2);
+    border-radius: 8px;
+    transition: width 0.5s ease;
+}
+
+.progress-label {
+    margin-left: 10px;
+    font-size: 16px;
+    color: #ff66b2;
+    font-weight: bold;
+}
+
+/* 全体のテーブルスタイル */
+.custom-pink-table {
+    border: 1px solid #ffccd5;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* ヘッダーのスタイル */
+.custom-pink-table thead th {
+    background-color: #ffccd5; /* ピンクの背景色 */
+    color: #721c24;           /* ダークピンクの文字色 */
+    font-weight: bold;
+    text-align: center;
+    border: none;
+}
+
+/* セルの境界線と文字のスタイル */
+.custom-pink-table tbody td {
+    border-top: 1px solid #f8d7da; /* ピンクの境界線 */
+    text-align: center;
+    color: #515151;
+    padding: 8px;
+}
+
+/* ホバースタイル */
+.custom-pink-table tbody tr:hover {
+    background-color: #ffd5dc; /* ホバー時のピンク色 */
+}
+

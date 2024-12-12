@@ -1,0 +1,68 @@
+<!-- templates/flashcard/paused_data_detail.html -->
+
+{% extends "base.html" %}
+{% block title %}PAUSED DATA DETAIL{% endblock %}
+{% block content %}
+{% include "templates/includes/back_button.html" %}
+<h2 class="title">セーブデータ詳細</h2>
+{% include "templates/includes/message.html" %}
+{% if user_progress_data %}
+{% for user_progress in user_progress_data %}
+<h4>難易度：{{ user_progress.level.name }}　モード：{% if user_progress.mode == 'en' %}英訳{% else %}和訳{% endif %}</h4>
+<table class="table custom-pink-table">
+    <thead>
+        <tr>
+            <th scope="col">出題数</th>
+            <th scope="col">回答数</th>
+            <th scope="col">正解数</th>
+            <th scope="col">正答率</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ user_progress.total_questions }}</td>
+            <td>{{ user_progress.current_question_index }}</td>
+            <td>{{ user_progress.score }}</td>
+            <td>{{ correct_answer_rate }}%</td>
+        </tr>
+    </tbody>
+</table>
+<div class="progress-box-detail">
+    <div class="progress-box-header">
+        達成率：{{ user_progress.current_question_index }} / {{ user_progress.total_questions }}
+    </div>
+    <div class="progress-bar-wrapper">
+        <div class="progress-bar-container">
+            <div class="progress-bar" data-current="{{ user_progress.current_question_index }}" data-total="{{ user_progress.total_questions }}"></div>
+        </div>
+    </div>
+</div>
+<div class="button">
+    <form method="POST" action="{% url 'quiz_restart' user_progress.id %}">
+        {% csrf_token %}
+        <button class="custom-button" type="submit">RESTART</button>
+    </form>
+</div>
+<div class="button my-3">
+    <form method="POST" action="{% url 'reset_user_progress' user_progress.id %}">
+        {% csrf_token %}
+        <button class="custom-button" type="submit">DELETE</button>
+    </form>
+</div>
+{% endfor %}
+<script>
+    // すべての進捗バーを取得して処理
+    document.querySelectorAll('.progress-bar').forEach(bar => {
+        const current = parseInt(bar.getAttribute('data-current'));
+        const total = parseInt(bar.getAttribute('data-total'));
+        const percentage = (current / total) * 100;
+        bar.style.width = `${percentage}%`;
+    });
+</script>
+{% else %}
+    <p>中断データはありません。</p>
+{% endif %}
+<p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
+<p><a href="{% url 'user_home' %}">ホームへ戻る</a></p>
+<p><a href="{% url 'logout' %}">ログアウト</a></p>
+{% endblock %}

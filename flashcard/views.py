@@ -116,7 +116,7 @@ def quiz(request):
     
     words = Word.objects.filter(level_id=level.id) # 選択した難易度の単語を全て抽出
     
-    # テストモードの場合、ランダムで5問出題する
+    # テストモードの場合、ランダムで100問出題する
     if test: 
         total_questions = 100
         questions = random.sample(list(words.values_list('id', flat=True)), total_questions)
@@ -180,13 +180,52 @@ def get_current_question(request, progress_id):
     
     return user_progress, current_question
 
+# セーブデータの詳細を表示する関数
+def paused_data_detail(request, progress_id):
+    # UserProgressを取得
+    user_progress_data = UserProgress.objects.filter(user=request.user, id=progress_id, is_completed=False).all()
+    for user_progress in user_progress_data:
+    
+    # 正答率を計算
+        if user_progress.current_question_index > 0:
+            correct_answer_rate = int(user_progress.score / user_progress.current_question_index * 100)
+        else:
+            correct_answer_rate = 0
+
+    # テンプレートにデータを渡す
+    context = {
+        'user_progress_data': user_progress_data,
+        'correct_answer_rate': correct_answer_rate,
+    }
+    return render(request, 'flashcard/paused_data_detail.html', context)
+
+# 復習モードセーブデータの詳細を表示する関数
+def review_paused_data_detail(request, progress_id):
+    # UserProgressを取得
+    review_progress_data = UserReviewProgress.objects.filter(user=request.user, id=progress_id, is_completed=False).all()
+    for review_progress in review_progress_data:
+    
+    # 正答率を計算
+        if review_progress.current_question_index > 0:
+            correct_answer_rate = int(review_progress.score / review_progress.current_question_index * 100)
+        else:
+            correct_answer_rate = 0
+
+    # テンプレートにデータを渡す
+    context = {
+        'review_progress_data': review_progress_data,
+        'correct_answer_rate': correct_answer_rate,
+    }
+    return render(request, 'flashcard/review_paused_data_detail.html', context)
+
+
 # 中断データで再開
 @login_required
 def quiz_restart(request, progress_id):
     # get_current_questionで進捗状況と現在の問題を取得
     user_progress, current_question = get_current_question(request, progress_id)
     
-    # user_progressと　current_questionの両方が存在しない場合
+    # user_progressとcurrent_questionの両方が存在しない場合
     if not(user_progress and current_question):
         messages.error(request, '問題が発生しました。ホーム画面へ戻ります')
         return redirect('user_home')
@@ -410,7 +449,7 @@ def pause_review(request, progress_id):
         messages.error(request, 'エラーが発生しました。ホームへ戻ります。')
         return redirect('user_home')
 
-# 中断データを削除関数
+# 中断データ削除関数
 def reset_user_progress(request, progress_id):
     # UserProgressの完了していないデータを全て取得
     user_progress_data = UserProgress.objects.filter(user=request.user, is_completed=False).all()

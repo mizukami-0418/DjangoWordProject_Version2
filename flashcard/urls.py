@@ -18,4 +18,6 @@ urlpatterns = [
     path('pause_review/<int:progress_id>/', views.pause_review, name='pause_review'),
     path('reset_user_progress/<int:progress_id>/', views.reset_user_progress, name='reset_user_progress'),
     path('reset_review_progress/<int:progress_id>/', views.reset_review_progress, name='reset_review_progress'),
+    path('paused_data_detail/<int:progress_id>', views.paused_data_detail, name='paused_data_detail'),
+    path('review_paused_data_detail/<int:progress_id>', views.review_paused_data_detail, name='review_paused_data_detail'),
 ]
