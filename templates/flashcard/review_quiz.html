@@ -11,6 +11,7 @@
 {% comment %} 英訳モード {% endcomment %}
     <h5>次の日本語を英訳してください</h5>
     <h5>日本語：{{ current_question.japanese }}</h5>
+    <h5>品詞：{{ current_question.part_of_speech }}</h5>
     <form method="POST" action="{% url 'check_review_answer' review_progress.id %}">
         {% csrf_token %}
         <p><input type="text" name="answer" id='answer' placeholder='回答を入力' class="form-control"></p>
@@ -21,7 +22,7 @@
 {% else %}
 {% comment %} 和訳モード {% endcomment %}
     <h5>次の英語を和訳してください</h5>
-    <h5>英語：{{ current_question }}</h5>
+    <h5>英語：{{ current_question }}({{ current_question.part_of_speech}})</h5>
     <form method="POST" action="{% url 'check_review_answer' review_progress.id %}">
         {% csrf_token %}
         <p><input type="text" name="answer" id='answer' placeholder='回答を入力' class="form-control"></p>
