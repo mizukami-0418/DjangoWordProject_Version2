@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import django_heroku
 import dj_database_url
 import os
 from pathlib import Path
@@ -91,6 +92,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wordbook.wsgi.application'
 
+# Herokuのデプロイ環境で設定を自動調整
+django_heroku.settings(locals())
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
