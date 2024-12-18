@@ -8,10 +8,22 @@
 <h5>{{ request.user.username }}さんこんにちは！<br>難易度を選択してください</h5>
 <form method="POST">
     {% csrf_token %}
-    <div>
+    {% comment %} <div>
         {% for level in levels %}
             <p><button class="custom-button" type="submit" name="level" value="{{ level.id }}">{{ level.name }}({{ level.description }})</button></p>
         {% endfor %}
+    </div> {% endcomment %}
+    <div>
+            <p><button class="custom-button" type="submit" name="level" value=1>Beginner(中学生)</button></p>
+    </div>
+    <div>
+            <p><button class="custom-shadow-button" type="button" name="level" value=2>Intermediate(高校生)<br>coming soon</button></p>
+    </div>
+    <div>
+            <p><button class="custom-shadow-button" type="button" name="level" value=3>Advanced(大学生)<br>coming soon</button></p>
+    </div>
+    <div>
+            <p><button class="custom-shadow-button" type="button" name="level" value=4>Expert(社会人)<br>coming soon</button></p>
     </div>
 </form>
 <p><a href="{% url 'detail' %}">ユーザー情報はこちら</a></p>
