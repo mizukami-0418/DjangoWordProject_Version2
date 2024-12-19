@@ -90,7 +90,7 @@ ul {
     width: fit-content; /* コンテンツ幅に調整 */
     margin: 24px auto; /* 3中央揃え */
     border: 2px solid #666666; /* 四角の枠線を追加 */
-    padding: 24px; /* 枠線とテキストの間に余白を作成 */
+    padding: 18px; /* 枠線とテキストの間に余白を作成 */
     border-radius: 24px; /* 角を少し丸くしたい場合 */
     max-width: 480px;
     background-color: white;

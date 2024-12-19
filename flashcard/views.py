@@ -345,10 +345,10 @@ def check_review_answer(request, progress_id):
             review_progress.is_completed = True
             review_progress.is_paused = False
             review_progress.save()
-            return render(request, 'flashcard/last_check_review_answer.html', {'review_progress':review_progress, 'current_question': current_question})
+            return render(request, 'flashcard/last_check_review_answer.html', {'review_progress':review_progress, 'current_question': current_question, 'answer': answer})
         else:
             review_progress.save()
-            return render(request, 'flashcard/check_review_answer.html', {'review_progress': review_progress, 'current_question': current_question})
+            return render(request, 'flashcard/check_review_answer.html', {'review_progress': review_progress, 'current_question': current_question, 'answer': answer})
     
     # POSTリクエスト以外はホームへリダイレクト
     else:
@@ -400,10 +400,10 @@ def check_answer(request, progress_id):
             user_progress.is_completed = True
             user_progress.is_paused = False
             user_progress.save()
-            return render(request, 'flashcard/last_check_answer.html', {'user_progress':user_progress, 'current_question': current_question})
+            return render(request, 'flashcard/last_check_answer.html', {'user_progress':user_progress, 'current_question': current_question, 'answer': answer})
         else:
             user_progress.save()
-            return render(request, 'flashcard/check_answer.html', {'user_progress': user_progress, 'current_question': current_question})
+            return render(request, 'flashcard/check_answer.html', {'user_progress': user_progress, 'current_question': current_question, 'answer': answer})
     
     # POSTリクエスト以外はuser_homeにリダイレクト
     else:
