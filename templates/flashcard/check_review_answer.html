@@ -6,6 +6,7 @@
 <h2 class="title">復習モード</h2>
 <h5>{% if review_progress.mode == 'en' %}英訳モード{% else %}和訳モード{% endif %}</h5>
 {% include "templates/includes/message.html" %}
+<h5>{{ request.user.username }}さんの回答：{{ answer }}</h5>
 <h4>解　答</h4>
 <div class="description">
     <p>英語：{{ current_question }}</p>
