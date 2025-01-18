@@ -302,7 +302,7 @@ def check_review_answer(request, progress_id):
     # 現在の問題を取得
     current_question = review_progress.questions.all()[review_progress.current_question_index]
     # ポストデータからanswerを取得
-    answer = request.POST.get('answer').strip().lower()
+    answer = request.POST.get('answer').strip()
     # 問題の解答を取得
     correct_answer = current_question.english if review_progress.mode == 'en' else current_question.japanese.split(',')
     # is_correctをFalseに設定
@@ -361,7 +361,7 @@ def check_review_answer(request, progress_id):
 def check_answer(request, progress_id):
     # get_current_questionで進捗状況と現在の問題を取得
     user_progress, current_question = get_current_question(request, progress_id)
-    answer = request.POST.get('answer').strip().lower() #POSTリクエストからanswerを取得
+    answer = request.POST.get('answer').strip() #POSTリクエストからanswerを取得
     # 問題の解答を取得
     correct_answer = current_question.english if user_progress.mode == 'en' else current_question.japanese.split(',')
         

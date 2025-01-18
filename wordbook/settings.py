@@ -33,6 +33,7 @@ DEBUG = False
 # 接続を許可するホストをローカルとherokuのアドレスに固定
 ALLOWED_HOSTS = [
     'flashcard-tamk-ed931c69d79f.herokuapp.com',
+    'flashcard.toamoku.net',
     'localhost',
     '127.0.0.1',
 ]

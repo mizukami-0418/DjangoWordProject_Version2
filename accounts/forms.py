@@ -7,7 +7,7 @@ from .models import CustomUser
 
 # 
 class UserRegistrationForm(forms.ModelForm):
-    confirm_password = forms.CharField(label='確認用パスワード', widget=forms.PasswordInput(attrs={'placeholder': '確認用パスワード', 'class': 'form-control'}))
+    confirm_password = forms.CharField(label='確認用パスワード', widget=forms.PasswordInput(attrs={'placeholder': 'パスワードをもう1度入力', 'class': 'form-control'}))
     
     class Meta:
         model = CustomUser
@@ -20,7 +20,7 @@ class UserRegistrationForm(forms.ModelForm):
         widgets = {
             'email': forms.EmailInput(attrs={'placeholder': 'sample@example.com', 'class': 'form-control'}),
             'username': forms.TextInput(attrs={'placeholder': 'Yamada Taro', 'class': 'form-control'}),
-            'password': forms.PasswordInput(attrs={'placeholder': 'パスワード', 'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'placeholder': '8文字以上で英数記号を使用してください', 'class': 'form-control'}),
         }        
         
     def clean_confirm_password(self):
