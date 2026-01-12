@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "flashcard",
     "error",
     "csp",
+    "rest_framework",
 ]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
