@@ -22,6 +22,6 @@ urlpatterns = [
     path("dictionary/", include("dictionary.urls")),
     path("flashcard/", include("flashcard.urls")),
     path("test-error/", views.test_error, name="test_error"),  # ERRORログ用
-    path("api/health", health_check),
+    path("api/health/", health_check),
     path("api/", include("dictionary.api.urls")),
 ]
