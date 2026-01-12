@@ -1,7 +1,8 @@
 # dictionary/api/urls.py
-from django.urls import path
-from .views import WordListAPIView
+from rest_framework.routers import DefaultRouter
+from .views import WordViewSet
 
-urlpatterns = [
-    path("words/", WordListAPIView.as_view()),
-]
+router = DefaultRouter()
+router.register("words", WordViewSet, basename="word")
+
+urlpatterns = router.urls
