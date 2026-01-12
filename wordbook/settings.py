@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # デバッグ設定の読み込み（存在しない場合はデフォルトでFalse）
-DEBUG = True
+DEBUG = False
 
 # 接続を許可するホストをローカルとherokuのアドレスに固定
 ALLOWED_HOSTS = [
