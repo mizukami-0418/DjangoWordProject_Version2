@@ -24,4 +24,9 @@ urlpatterns = [
     path("test-error/", views.test_error, name="test_error"),  # ERRORログ用
     path("api/health/", health_check),
     path("api/", include("dictionary.api.urls")),
+    # ===== 🆕 DRF API用URL =====
+    path("api/accounts/", include("accounts.api_urls")),
+    # 今後追加予定
+    # path('api/dictionary/', include('dictionary.api_urls')),
+    # path('api/flashcard/', include('flashcard.api_urls')),
 ]

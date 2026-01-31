@@ -29,48 +29,39 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # ===== 🆕 Supabase設定 =====
-SUPABASE_URL = config('SUPABASE_URL')
-SUPABASE_JWT_SECRET = config('SUPABASE_JWT_SECRET')
+SUPABASE_URL = config("SUPABASE_URL")
+SUPABASE_JWT_SECRET = config("SUPABASE_JWT_SECRET")
 
 if not SUPABASE_JWT_SECRET:
-    raise ValueError('SUPABASE_JWT_SECRET must be set in .env file')
+    raise ValueError("SUPABASE_JWT_SECRET must be set in .env file")
 # ============================
 
 # デバッグ設定の読み込み（存在しない場合はデフォルトでFalse）
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 # 接続を許可するホストをローカルとherokuのアドレスに固定
-ALLOWED_HOSTS = [
-    config("ALLOWED_HOSTS", default="").split(",")
-    # "flashcard-tamk-ed931c69d79f.herokuapp.com",
-    # "flashcard.toamoku.net",
-    # "localhost",
-    # "127.0.0.1",
-]
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
 
-CORS_ALLOWED_ORIGINS = [
-    config("CORS_ALLOWED_ORIGINS", default="").split(",")
-    # "http://localhost:3000",
-    # "https://https://wordbook-frontend-five.vercel.app/",
-]
+CORS_ALLOWED_ORIGINS = config("CORS_ALLOWED_ORIGINS", default="").split(",")
+
 CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
 
 # ===== 🆕 REST Framework設定 =====
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'config.authentication.SupabaseAuthentication',  # 🆕 Supabase JWT認証
-        'rest_framework.authentication.SessionAuthentication',  # 既存のセッション認証
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "wordbook.authentication.SupabaseAuthentication",  # 🆕 Supabase JWT認証
+        "rest_framework.authentication.SessionAuthentication",  # 既存のセッション認証
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
-    'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.renderers.JSONRenderer',
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
     ],
-    'DEFAULT_PARSER_CLASSES': [
-        'rest_framework.parsers.JSONParser',
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
     ],
 }
 # ============================
@@ -95,7 +86,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
