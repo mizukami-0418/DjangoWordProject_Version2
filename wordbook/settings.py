@@ -28,6 +28,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
 
+# ===== 🆕 Supabase設定 =====
+SUPABASE_URL = config('SUPABASE_URL')
+SUPABASE_JWT_SECRET = config('SUPABASE_JWT_SECRET')
+
+if not SUPABASE_JWT_SECRET:
+    raise ValueError('SUPABASE_JWT_SECRET must be set in .env file')
+# ============================
+
 # デバッグ設定の読み込み（存在しない場合はデフォルトでFalse）
 DEBUG = config("DEBUG", default=False, cast=bool)
 
@@ -45,8 +53,27 @@ CORS_ALLOWED_ORIGINS = [
     # "http://localhost:3000",
     # "https://https://wordbook-frontend-five.vercel.app/",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 # Application definition
+
+# ===== 🆕 REST Framework設定 =====
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'config.authentication.SupabaseAuthentication',  # 🆕 Supabase JWT認証
+        'rest_framework.authentication.SessionAuthentication',  # 既存のセッション認証
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
+}
+# ============================
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -62,11 +89,13 @@ INSTALLED_APPS = [
     "error",
     "csp",
     "rest_framework",
+    "corsheaders",
 ]
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
