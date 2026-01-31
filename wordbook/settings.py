@@ -29,19 +29,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # デバッグ設定の読み込み（存在しない場合はデフォルトでFalse）
-DEBUG = False
+DEBUG = config("DEBUG", default=False, cast=bool)
 
 # 接続を許可するホストをローカルとherokuのアドレスに固定
 ALLOWED_HOSTS = [
-    "flashcard-tamk-ed931c69d79f.herokuapp.com",
-    "flashcard.toamoku.net",
-    "localhost",
-    "127.0.0.1",
+    config("ALLOWED_HOSTS", default="").split(",")
+    # "flashcard-tamk-ed931c69d79f.herokuapp.com",
+    # "flashcard.toamoku.net",
+    # "localhost",
+    # "127.0.0.1",
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://https://wordbook-frontend-five.vercel.app/",
+    config("CORS_ALLOWED_ORIGINS", default="").split(",")
+    # "http://localhost:3000",
+    # "https://https://wordbook-frontend-five.vercel.app/",
 ]
 
 # Application definition
