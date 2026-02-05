@@ -61,6 +61,8 @@ class SupabaseAuthentication(authentication.BaseAuthentication):
     def _verify_jwt(self, token):
         """
         Supabase JWTを検証
+        ES256の場合はJWKSエンドポイントから公開鍵を動的に取得
+        HS256の場合は秘密鍵で検証
 
         Args:
             token (str): JWTトークン
@@ -68,19 +70,60 @@ class SupabaseAuthentication(authentication.BaseAuthentication):
         Returns:
             dict: デコードされたペイロード
         """
-        if not settings.SUPABASE_JWT_SECRET:
-            raise exceptions.AuthenticationFailed(
-                "Supabase JWT Secretが設定されていません"
+        # トークンのアルゴリズムを確認
+        try:
+            header = jwt.get_unverified_header(token)
+            algorithm = header.get("alg", "HS256")
+        except Exception:
+            algorithm = "HS256"  # デフォルトはHS256
+
+        # ES256の場合はJWKSから公開鍵を取得
+        if algorithm == "ES256":
+            try:
+                from jwt import PyJWKClient
+
+                # SupabaseのJWKSエンドポイント
+                jwks_url = f"{settings.SUPABASE_URL}/auth/v1/.well-known/jwks.json"
+                jwks_client = PyJWKClient(jwks_url)
+
+                # トークンから適切な公開鍵を取得
+                signing_key = jwks_client.get_signing_key_from_jwt(token)
+
+                # ES256で検証
+                payload = jwt.decode(
+                    token,
+                    signing_key.key,
+                    algorithms=["ES256"],
+                    audience="authenticated",
+                )
+
+                return payload
+
+            except ImportError:
+                raise exceptions.AuthenticationFailed(
+                    "ES256検証にはPyJWT[crypto]が必要です: pip install PyJWT[crypto]"
+                )
+            except Exception as e:
+                logger.error(f"ES256 JWT verification failed: {str(e)}")
+                raise exceptions.AuthenticationFailed(
+                    f"JWT検証に失敗しました: {str(e)}"
+                )
+
+        # HS256の場合は秘密鍵で検証
+        else:
+            if not settings.SUPABASE_JWT_SECRET:
+                raise exceptions.AuthenticationFailed(
+                    "SUPABASE_JWT_SECRET が設定されていません"
+                )
+
+            payload = jwt.decode(
+                token,
+                settings.SUPABASE_JWT_SECRET,
+                algorithms=["HS256"],
+                audience="authenticated",
             )
 
-        payload = jwt.decode(
-            token,
-            settings.SUPABASE_JWT_SECRET,
-            algorithms=["HS256"],
-            audience="authenticated",
-        )
-
-        return payload
+            return payload
 
     def _get_or_create_user(self, payload):
         """
