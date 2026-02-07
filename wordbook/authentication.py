@@ -143,27 +143,50 @@ class SupabaseAuthentication(authentication.BaseAuthentication):
                 "トークンに必要な情報が含まれていません"
             )
 
-        # supabase_idでユーザーを取得または作成
-        user, created = User.objects.get_or_create(
-            supabase_id=supabase_user_id,
-            defaults={
-                "email": email,
-                "username": email.split("@")[
-                    0
-                ],  # 仮のusername（後でフロントエンドから更新）
-            },
-        )
+        # まず supabase_id でユーザーを探す
+        try:
+            user = User.objects.get(supabase_id=supabase_user_id)
+            logger.info(f"Existing user found by supabase_id: {email}")
 
-        if created:
-            logger.info(f"New user created via Supabase: {email}")
+            # メールアドレスが変更されている場合は更新
+            if user.email != email:
+                logger.info(
+                    f"Updating email for user {user.id}: {user.email} -> {email}"
+                )
+                user.email = email
+                user.save(update_fields=["email"])
 
-        # メールアドレスが変更されている場合は更新
-        if user.email != email:
-            logger.info(f"Updating email for user {user.id}: {user.email} -> {email}")
-            user.email = email
-            user.save(update_fields=["email"])
+            return user
 
-        return user
+        except User.DoesNotExist:
+            # supabase_idで見つからない場合、emailで検索
+            try:
+                user = User.objects.get(email=email)
+                logger.warning(
+                    f"User found by email but missing supabase_id. "
+                    f"Linking supabase_id: {supabase_user_id} to user: {user.id}"
+                )
+                # 既存ユーザーにsupabase_idを紐付け
+                user.supabase_id = supabase_user_id
+                user.save(update_fields=["supabase_id"])
+                return user
+
+            except User.DoesNotExist:
+                # 完全に新しいユーザーを作成
+                try:
+                    user = User.objects.create(
+                        supabase_id=supabase_user_id,
+                        email=email,
+                        username=email.split("@")[0],  # 仮のusername
+                    )
+                    logger.info(f"New user created via Supabase: {email}")
+                    return user
+
+                except Exception as e:
+                    logger.error(f"Failed to create user: {str(e)}")
+                    raise exceptions.AuthenticationFailed(
+                        f"ユーザーの作成に失敗しました: {str(e)}"
+                    )
 
     def authenticate_header(self, request):
         """

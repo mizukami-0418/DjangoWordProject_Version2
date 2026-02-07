@@ -26,7 +26,7 @@ urlpatterns = [
     path("api/", include("dictionary.api.urls")),
     # ===== 🆕 DRF API用URL =====
     path("api/accounts/", include("accounts.api_urls")),
+    path("api/dictionary/", include("dictionary.api_urls")),
     # 今後追加予定
-    # path('api/dictionary/', include('dictionary.api_urls')),
     # path('api/flashcard/', include('flashcard.api_urls')),
 ]
