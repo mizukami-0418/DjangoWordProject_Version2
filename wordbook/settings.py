@@ -214,9 +214,9 @@ MESSAGE_TAGS = {
 }
 
 
-# EMIL設定
+# EMAIL設定
 # 開発環境用のメール設定
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # 実運用時には以下のようにSMTPメールサーバーを設定します
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -225,6 +225,15 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+
+# デフォルトの送信元メールアドレス
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="noreply@wordbook.com")
+
+# 管理者用メールアドレス
+ADMIN_EMAIL = config("ADMIN_EMAIL", default="admin@wordbook.com")
+
+# 管理者用URL
+ADMIN_URL = config("ADMIN_URL", default="http://localhost:8000/admin")
 
 # セキュリティ設定
 
@@ -312,6 +321,9 @@ LOGGING = {
             "filename": os.path.join(LOG_DIR, "error.log"),
             "formatter": "verbose",
         },
+        "console": {
+            "class": "logging.StreamHandler",
+        },
     },
     "loggers": {
         "django": {  # 全般ログ
@@ -323,6 +335,10 @@ LOGGING = {
             "handlers": ["error_file"],
             "level": "ERROR",
             "propagate": False,
+        },
+        "contact": {
+            "handlers": ["console"],
+            "level": "INFO",
         },
     },
 }

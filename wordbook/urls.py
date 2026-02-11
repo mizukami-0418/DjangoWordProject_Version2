@@ -28,4 +28,5 @@ urlpatterns = [
     path("api/accounts/", include("accounts.api_urls")),
     path("api/dictionary/", include("dictionary.api_urls")),
     path("api/flashcard/", include("flashcard.api_urls")),
+    path("api/contact/", include("contact.api_urls")),
 ]
