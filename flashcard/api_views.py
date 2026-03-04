@@ -148,6 +148,26 @@ def start_quiz(request):
     first_question_id = questions[0]
     first_question = Word.objects.get(id=first_question_id)
 
+    # 品詞と成句を取得（文字列 or オブジェクトに対応）
+    part_of_speech = first_question.part_of_speech
+    phrase = first_question.phrase
+
+    # part_of_speechが文字列かオブジェクトか判定
+    if part_of_speech:
+        part_of_speech_str = (
+            part_of_speech.name
+            if hasattr(part_of_speech, "name")
+            else str(part_of_speech)
+        )
+    else:
+        part_of_speech_str = None
+
+    # phraseが文字列かオブジェクトか判定
+    if phrase:
+        phrase_str = phrase.name if hasattr(phrase, "name") else str(phrase)
+    else:
+        phrase_str = None
+
     return Response(
         {
             "progress": UserProgressSerializer(user_progress).data,
@@ -158,6 +178,8 @@ def start_quiz(request):
                 else first_question.english,
                 "question_number": 1,
                 "total_questions": total_questions,
+                "part_of_speech": part_of_speech_str,
+                "phrase": phrase_str,
             },
         },
         status=status.HTTP_201_CREATED,
@@ -203,6 +225,26 @@ def submit_answer(request):
     questions = json.loads(user_progress.question_ids)
     current_question_id = questions[user_progress.current_question_index]
     current_question = get_object_or_404(Word, id=current_question_id)
+
+    # 品詞と成句を取得（文字列 or オブジェクトに対応）
+    part_of_speech = current_question.part_of_speech
+    phrase = current_question.phrase
+
+    # part_of_speechが文字列かオブジェクトか判定
+    if part_of_speech:
+        part_of_speech_str = (
+            part_of_speech.name
+            if hasattr(part_of_speech, "name")
+            else str(part_of_speech)
+        )
+    else:
+        part_of_speech_str = None
+
+    # phraseが文字列かオブジェクトか判定
+    if phrase:
+        phrase_str = phrase.name if hasattr(phrase, "name") else str(phrase)
+    else:
+        phrase_str = None
 
     # 正解を判定
     if user_progress.mode == "en":
@@ -250,6 +292,9 @@ def submit_answer(request):
                     user_progress.score / user_progress.total_questions * 100, 1
                 ),
                 "next_question": None,
+                # 品詞と成句も返す
+                "part_of_speech": part_of_speech_str,
+                "phrase": phrase_str,
             }
         )
 
@@ -267,6 +312,9 @@ def submit_answer(request):
                 "score": user_progress.score,
                 "current_question_index": user_progress.current_question_index,
                 "is_completed": False,
+                # 品詞と成句も返す
+                "part_of_speech": part_of_speech_str,
+                "phrase": phrase_str,
                 "next_question": {
                     "id": next_question.id,
                     "question": next_question.japanese
@@ -326,6 +374,26 @@ def resume_quiz(request, progress_id):
     current_question_id = questions[user_progress.current_question_index]
     current_question = Word.objects.get(id=current_question_id)
 
+    # 品詞と成句を取得（文字列 or オブジェクトに対応）
+    part_of_speech = current_question.part_of_speech
+    phrase = current_question.phrase
+
+    # part_of_speechが文字列かオブジェクトか判定
+    if part_of_speech:
+        part_of_speech_str = (
+            part_of_speech.name
+            if hasattr(part_of_speech, "name")
+            else str(part_of_speech)
+        )
+    else:
+        part_of_speech_str = None
+
+    # phraseが文字列かオブジェクトか判定
+    if phrase:
+        phrase_str = phrase.name if hasattr(phrase, "name") else str(phrase)
+    else:
+        phrase_str = None
+
     return Response(
         {
             "progress": UserProgressSerializer(user_progress).data,
@@ -336,6 +404,8 @@ def resume_quiz(request, progress_id):
                 else current_question.english,
                 "question_number": user_progress.current_question_index + 1,
                 "total_questions": user_progress.total_questions,
+                "part_of_speech": part_of_speech_str,
+                "phrase": phrase_str,
             },
         }
     )
